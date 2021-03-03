@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "openclassrooms",
+    "database": "database_development_groupomania",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "admin",
+    "password": "openclassrooms",
+    "database": "database_test_groupomania",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "admin",
+    "password": "openclassrooms",
+    "database": "database_production_groupomania",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
