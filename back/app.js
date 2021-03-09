@@ -1,43 +1,46 @@
-/* **********FICHIER app.js CONTIENT NOTRE APPLICATION********** */
+/* ******************** app.js CONTIENT NOTRE APPLICATION ******************** */
+
 // imports
 const express = require('express');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const userRoutes = require("./routes/user.routes");
+const postRoutes = require('./routes/post.routes');
+const likeDislikeRoutes = require('./routes/likeDislike.routes');
+const commentRoutes = require('./routes/comment.routes');
+const uploadRoutes = require('./routes/upload.routes');
 const { checkUser, requireAuth } = require('./middleware/auth.middleware');
-
+const cors = require('cors');
+require('dotenv').config({ path: './config/.env' });
 
 const app = express();
 
-// Middleware Header qui permet à toutes les demandes de toutes les origines d'accéder à l'API
-app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization',
-	);
-	res.setHeader(
-		'Access-Control-Allow-Methods',
-		'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-	);
-	next();
-});
+const corsOptions = {
+	origin: process.env.CLIENT_URL,
+	credentials: true,
+	'allowedHeaders': ['sessionId', 'Content-Type'],
+  'exposedHeaders': ['sessionId'],
+  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'preflightContinue': false
+}
+app.use(cors(corsOptions));
 
 // Middleware qui permet de transformer le corp de la requête en un objet JSON utilisable
-app.use(bodyParser.urlencoded({ extended: true}));
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 app.use(cookieParser());
-
-// routes
-app.use('/api/user', userRoutes);
 
 // jwt
 app.get('*', checkUser);
 app.get('/jwtid', requireAuth, (req, res) => {
-	res.status(200).json(res.locals.user)
+	res.status(200).json(res.locals.user.id)
 });
 
-
+// routes
+app.use('/api/user', userRoutes);
+app.use('/api/post', postRoutes);
+app.use('/api/post', likeDislikeRoutes);
+app.use('/api/post', commentRoutes);
+app.use('/api/user', uploadRoutes);
 
 // Export de l'application express pour déclaration dans server.js
 module.exports = app;

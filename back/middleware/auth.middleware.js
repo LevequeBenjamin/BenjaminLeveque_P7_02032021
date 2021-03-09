@@ -1,13 +1,11 @@
-/* *****Middleware qui protégera les routes sélectionnées et vérifier que l'utilisateur est authentifié avant d'autoriser l'envoi de ses requêtes***** */
+/* ******************** auth.middleware ******************** */
 
-// On récupère le package jsonwebtoken
+// imports
 const jwt = require('jsonwebtoken');
 const models = require('../models');
-
-// utilisation du package dotenv pour masquer les informations de connexion à la base de données à l'aide de variables d'environnement
 require('dotenv').config({ path: '../config/.env' });
 
-//* *****Midlleware auth***** *//
+//* ******************** checkUser ******************** *//
 exports.checkUser = (req, res, next) => {
 	const token = req.cookies.jwt;
 	if (token) {
@@ -28,8 +26,9 @@ exports.checkUser = (req, res, next) => {
 		next();
 	}
 };
-//* //////////////////// auth END //////////////////// */
+//* ******************** checkUser end ******************** *//
 
+//* ******************** requireAuth ******************** *//
 exports.requireAuth = (req, res, next) => {
 	const token = req.cookies.jwt;
 	console.log(token);
@@ -46,3 +45,4 @@ exports.requireAuth = (req, res, next) => {
 		console.log('no token !');
 	}
 };
+//* ******************** requireAuth end ******************** *//

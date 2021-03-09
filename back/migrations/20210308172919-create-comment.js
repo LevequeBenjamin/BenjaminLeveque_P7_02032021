@@ -8,21 +8,21 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      idUSERS: {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
-          key: 'id'
-        }
+					model: 'Users',
+					key: 'id',
+				},
       },
-      idPOSTS: {
+      postId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Posts',
-          key: 'id'
-        }
+					model: 'Posts',
+					key: 'id',
+				},
       },
       content: {
         allowNull: false,

@@ -1,21 +1,27 @@
+// ******************** auth.controller ******************** //
+
+// imports
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwtUtils = require('../utils/jwt.utils');
 const verifyInput = require('../middleware/verifyInput');
-const {signUpErrors} = require('../utils/errors.utils');
+const { signUpErrors } = require('../utils/errors.utils');
 require('dotenv').config({ path: '../config/.env' });
 
-const maxAge = 1 * 24 * 60 * 60 * 1000;
+// constants
+const maxAge = 3 * 24 * 60 * 60 * 1000;
 
+/* ******************** signup ******************** */
+// permet de créer un utilisateur
 exports.signUp = async (req, res) => {
 	const { email, username, password, bio } = req.body;
-	console.log(req.body);
 
+	// on contrôle que tous les champs soit rempli
 	if (email == null || username == null || password == null) {
 		return res.status(400).json({ error: 'paramètres manquants !' });
 	}
 
-	// verify Input
+	// on valide les champs
 	let emailTrue = verifyInput.validEmail(email);
 	let passwordTrue = verifyInput.validPassword(password);
 	let usernameTrue = verifyInput.validUsername(username);
@@ -38,9 +44,10 @@ exports.signUp = async (req, res) => {
 		});
 	}
 
+	// hash le password
 	bcrypt.hash(password, 10).then(async function (hash) {
-		// Store hash in your password DB.
 		try {
+			// on crée l'utilisateur
 			const user = await models.User.create({
 				email,
 				username,
@@ -55,40 +62,50 @@ exports.signUp = async (req, res) => {
 		}
 	});
 };
+/* ******************** signup end ******************** */
 
-exports.login = (req, res) => {
+/* ******************** login ******************** */
+// permet de loger un utilisateur
+exports.login = async (req, res) => {
 	const { email, password } = req.body;
 
+	// on contrôle que tous les champs soit rempli
 	if (email == null || password == null) {
 		return res.status(400).json({ error: 'paramètres manquants' });
 	}
-
-	models.User.findOne({ where: { email: email } })
-		.then(user => {
-			if (!user) {
-				return res.status(401).json({ error: 'Email inconnu' });
-			}
-			bcrypt
-				.compare(password, user.password)
-				.then(valid => {
-					if (!valid) {
-						return res.status(401).json({ error: 'Le mot de passe ne correspond pas' });
-					}
-					const token = jwtUtils.generateTokenForUser(user);
-					res.cookie('jwt', token, { httpOnly: true, maxAge});
-					res.status(200).json({
-						id: user.id,
-					});
-				})
-				.catch(error => res.status(500).json({ error }));
-		})
-		.catch(error => res.status(500).json({ error }));
+	try {
+		// on contrôle si l'email existe dans la bd
+		const user = await models.User.findOne({ where: { email: email } });
+		if (!user) {
+			return res.status(401).json({ error: 'Email inconnu' });
+		}
+		await bcrypt
+			// on compare le password
+			.compare(password, user.password)
+			.then(valid => {
+				if (!valid) {
+					return res
+						.status(401)
+						.json({ error: 'Le mot de passe ne correspond pas' });
+				}
+				// on crée un token est on le passe dans le cookie
+				const token = jwtUtils.generateTokenForUser(user);
+				res.cookie('jwt', token, { httpOnly: true, maxAge });
+				res.status(200).json({
+					id: user.id,
+				});
+			})
+			.catch(error => res.status(500).json({ error }));
+	} catch (error) {
+		res.status(500).json({ error });
+	}
 };
+/* ******************** login end ******************** */
 
+/* ******************** logout ******************** */
+// permet à l'utilisateur de se logout
 exports.logout = (req, res) => {
-	res.cookie('jwt', '', { maxAge: 1});
+	res.cookie('jwt', '', { maxAge: 1 });
 	res.redirect('/');
 };
-
-
-
+/* ******************** logout end ******************** */
