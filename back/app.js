@@ -3,7 +3,7 @@
 // imports
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const userRoutes = require("./routes/user.routes");
+const userRoutes = require('./routes/user.routes');
 const postRoutes = require('./routes/post.routes');
 const likeDislikeRoutes = require('./routes/likeDislike.routes');
 const commentRoutes = require('./routes/comment.routes');
@@ -17,22 +17,35 @@ const app = express();
 const corsOptions = {
 	origin: process.env.CLIENT_URL,
 	credentials: true,
-	'allowedHeaders': ['sessionId', 'Content-Type'],
-  'exposedHeaders': ['sessionId'],
-  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  'preflightContinue': false
-}
+	allowedHeaders: ['sessionId', 'Content-Type'],
+	exposedHeaders: ['sessionId'],
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	preflightContinue: false,
+};
 app.use(cors(corsOptions));
+
+// app.use((req, res, next) => {
+// 	res.setHeader('Access-Control-Allow-Origin', '*');
+// 	res.setHeader(
+// 		'Access-Control-Allow-Headers',
+// 		'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization',
+// 	);
+// 	res.setHeader(
+// 		'Access-Control-Allow-Methods',
+// 		'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+// 	);
+// 	next();
+// });
 
 // Middleware qui permet de transformer le corp de la requête en un objet JSON utilisable
 app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // jwt
 app.get('*', checkUser);
 app.get('/jwtid', requireAuth, (req, res) => {
-	res.status(200).json(res.locals.user.id)
+	res.status(200).json(res.locals.user.id);
 });
 
 // routes

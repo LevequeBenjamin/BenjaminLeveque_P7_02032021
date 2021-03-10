@@ -1,16 +1,4 @@
-input,
-textarea {
-  resize: none;
-  border-radius: 20px;
-  width: 270px;
-  font-family: $font-1;
-  background: $white;
-}
-textarea {
-  &:focus {
-    box-shadow: 0 0 4px rgba(0, 22, 44, 0.1);
-  }
-}
+
 button,
 input[type="submit"] {
   background: $color-2;

@@ -17,9 +17,9 @@ exports.signUp = async (req, res) => {
 	const { email, username, password, bio } = req.body;
 
 	// on contrôle que tous les champs soit rempli
-	if (email == null || username == null || password == null) {
-		return res.status(400).json({ error: 'paramètres manquants !' });
-	}
+	//if (email == null || username == null || password == null) {
+		//return res.status(400).json({ error: 'paramètres manquants !' });
+	//}
 
 	// on valide les champs
 	let emailTrue = verifyInput.validEmail(email);
@@ -27,19 +27,19 @@ exports.signUp = async (req, res) => {
 	let usernameTrue = verifyInput.validUsername(username);
 
 	if (usernameTrue == false) {
-		return res.status(400).json({
-			error:
+		 res.status(200).json({
+			errorUsername:
 				'username non valid ! (Il doit contenir entre 3 et 36 caractères et ne pas contenir de caractères spécial)',
 		});
 	}
 
 	if (emailTrue == false) {
-		return res.status(400).json({ error: 'email non valide !' });
+		 res.status(200).json({ errorEmail: 'email non valide !' });
 	}
 
 	if (passwordTrue == false) {
-		return res.status(400).json({
-			error:
+		 res.status(200).json({
+			errorPassword:
 				'password non valide !(Il doit contenir entre 8 et 42 caractères, au moins un chiffre, une majuscule, une minuscule et un caractère spécial !',
 		});
 	}
@@ -71,22 +71,22 @@ exports.login = async (req, res) => {
 
 	// on contrôle que tous les champs soit rempli
 	if (email == null || password == null) {
-		return res.status(400).json({ error: 'paramètres manquants' });
+		 res.status(200).json({ error: 'paramètres manquants' });
 	}
 	try {
 		// on contrôle si l'email existe dans la bd
 		const user = await models.User.findOne({ where: { email: email } });
 		if (!user) {
-			return res.status(401).json({ error: 'Email inconnu' });
+			res.status(200).json({ errorEmail: 'Email inconnu' });
 		}
 		await bcrypt
 			// on compare le password
 			.compare(password, user.password)
 			.then(valid => {
 				if (!valid) {
-					return res
-						.status(401)
-						.json({ error: 'Le mot de passe ne correspond pas' });
+					 res
+						.status(200)
+						.json({ errorPassword: 'Le mot de passe ne correspond pas' });
 				}
 				// on crée un token est on le passe dans le cookie
 				const token = jwtUtils.generateTokenForUser(user);

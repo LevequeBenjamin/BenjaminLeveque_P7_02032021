@@ -2,7 +2,7 @@
 
 // ******************** signUpErrors ******************** //
 exports.signUpErrors = err => {
-	let errors = { pseudo: '', email: '' };
+	let errors = { username: '', email: '' };
 
 	if (
 		err.name === 'SequelizeUniqueConstraintError' &&
@@ -14,11 +14,24 @@ exports.signUpErrors = err => {
 		err.name === 'SequelizeUniqueConstraintError' &&
 		Object.keys(err.fields)[0].includes('Users.username')
 	)
-		errors.pseudo = 'Ce pseudo est déjà pris';
+		errors.username = 'Ce pseudo est déjà pris';
 
 	return errors;
 };
 // ******************** signUpErrors end ******************** //
+
+module.exports.signInErrors = (err) => {
+  let errors = { email: '', password: ''}
+
+  if (err.message.includes("email")) 
+    errors.email = "Email inconnu";
+  
+  if (err.message.includes('password'))
+    errors.password = "Le mot de passe ne correspond pas"
+
+  return errors;
+}
+
 
 exports.uploadErrors = err => {
 	let errors = { format: '', maxSize: '' };
