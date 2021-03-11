@@ -28,22 +28,22 @@ exports.commentPost = async (req, res) => {
 		});
 
 		if (newComment) {
-			res.status(201).json({ message: 'le commentaire est créé', newComment });
+			res.status(200).json({ newComment });
 		} else {
 			return res
 				.status(401)
 				.json({ error: 'désolé, quelque chose à mal tourné' });
 		}
-		// const postFound = await models.Post.findOne({
-		// 	where: { id: postId },
-		// });
-		// if (postFound) {
-		// 	await postFound.update({
-		// 		comments: postFound.comments + newComment,
-		// 	});
-		// } else {
-		// 	res.status(400).json({ error: 'cannot fetch user !' });
-		// }
+		 const postFound = await models.Post.findOne({
+		 	where: { id: postId },
+		 });
+		 if (postFound) {
+		 	await postFound.update({
+				comments: postFound.comments +1,
+		 	});
+		 } else {
+		 	res.status(400).json({ error: 'cannot fetch user !' });
+		 }
 	} catch (error) {
 		res.status(500).json({ error });
 	}
@@ -58,7 +58,7 @@ exports.readCommentPost = async (req, res) => {
 			getIncludedAssociation: ['user'],
 		});
 		if (comments > []) {
-			res.status(200).send({ message: comments });
+			res.status(200).json(comments);
 		} else {
 			return res.status(401).json({ error: "il n'y a pas de commentaires" });
 		}
@@ -94,6 +94,16 @@ exports.deleteCommentPost = async (req, res) => {
 		await models.Comment.destroy({
 			where: { id: req.body.id },
 		});
+		const postFound = await models.Post.findOne({
+			where: { id: postId },
+		});
+		if (postFound) {
+			await postFound.update({
+			 comments: postFound.comments -1,
+			});
+		} else {
+			res.status(400).json({ error: 'cannot fetch user !' });
+		}
 		res.status(200).json({ message: 'commentaire supprimé' });
 	} catch (error) {
 		res.status(500).json({ error });

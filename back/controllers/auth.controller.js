@@ -18,7 +18,7 @@ exports.signUp = async (req, res) => {
 
 	// on contrôle que tous les champs soit rempli
 	//if (email == null || username == null || password == null) {
-		//return res.status(400).json({ error: 'paramètres manquants !' });
+	//return res.status(400).json({ error: 'paramètres manquants !' });
 	//}
 
 	// on valide les champs
@@ -27,40 +27,42 @@ exports.signUp = async (req, res) => {
 	let usernameTrue = verifyInput.validUsername(username);
 
 	if (usernameTrue == false) {
-		 res.status(200).json({
+		res.status(200).json({
 			errorUsername:
 				'username non valid ! (Il doit contenir entre 3 et 36 caractères et ne pas contenir de caractères spécial)',
 		});
 	}
 
 	if (emailTrue == false) {
-		 res.status(200).json({ errorEmail: 'email non valide !' });
+		res.status(200).json({ errorEmail: 'email non valide !' });
 	}
 
 	if (passwordTrue == false) {
-		 res.status(200).json({
+		res.status(200).json({
 			errorPassword:
 				'password non valide !(Il doit contenir entre 8 et 42 caractères, au moins un chiffre, une majuscule, une minuscule et un caractère spécial !',
 		});
 	}
 
-	// hash le password
-	bcrypt.hash(password, 10).then(async function (hash) {
-		try {
-			// on crée l'utilisateur
-			const user = await models.User.create({
-				email,
-				username,
-				password: hash,
-				bio,
-				isAdmin: 0,
-			});
-			res.status(201).json({ user: user.id });
-		} catch (err) {
-			const errors = signUpErrors(err);
-			res.status(200).send({ errors });
-		}
-	});
+	if (usernameTrue == true && emailTrue == true && passwordTrue == true) {
+		// hash le password
+		bcrypt.hash(password, 10).then(async function (hash) {
+			try {
+				// on crée l'utilisateur
+				const user = await models.User.create({
+					email,
+					username,
+					password: hash,
+					bio,
+					isAdmin: 0,
+				});
+				res.status(201).json({ user: user.id });
+			} catch (err) {
+				const errors = signUpErrors(err);
+				res.status(200).send({ errors });
+			}
+		});
+	}
 };
 /* ******************** signup end ******************** */
 
@@ -71,7 +73,7 @@ exports.login = async (req, res) => {
 
 	// on contrôle que tous les champs soit rempli
 	if (email == null || password == null) {
-		 res.status(200).json({ error: 'paramètres manquants' });
+		res.status(200).json({ error: 'paramètres manquants' });
 	}
 	try {
 		// on contrôle si l'email existe dans la bd
@@ -84,7 +86,7 @@ exports.login = async (req, res) => {
 			.compare(password, user.password)
 			.then(valid => {
 				if (!valid) {
-					 res
+					res
 						.status(200)
 						.json({ errorPassword: 'Le mot de passe ne correspond pas' });
 				}

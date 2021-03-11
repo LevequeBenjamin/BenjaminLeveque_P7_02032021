@@ -10,6 +10,7 @@ router.patch('/like-post/:id', likeController.likePost);
 router.patch('/dislike-post/:id', disLikeController.dislikePost);
 router.patch('/unlike-post/:id', likeController.deleteLike);
 router.patch('/undislike-post/:id', disLikeController.deleteDisLike);
+router.get('/read-like-post', likeController.readLikePost);
 
 // exports
 module.exports = router;

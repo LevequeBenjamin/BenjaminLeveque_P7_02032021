@@ -9,7 +9,7 @@ const pipeline = promisify(require('stream').pipeline);
 
 /* ******************** uploadProfil ******************** */
 // permet de upload une photo
-exports.uploadProfil = async (req, res) => {
+exports.uploadProfil = async (req, res, next) => {
 	try {
 		if (
 			req.file.detectedMimeType !== 'image/jpg' &&

@@ -10,7 +10,7 @@ module.exports = {
 		return regexPassword.test(value);
 	},
 	validUsername: function (value) {
-		const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{3,12}$/;
+		const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{2,12}$/;
 		return usernameRegex.test(value);
 	},
 	validPost: function (value) {

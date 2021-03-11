@@ -20,7 +20,7 @@ exports.likePost = async (req, res) => {
 			where: { id: userId },
 		});
 		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+			 res.status(401).json({ error: 'Utilisateur non trouvé !' });
 		}
 
 		// on contrôle si l'utilisateur à déjà liké le post
@@ -32,7 +32,7 @@ exports.likePost = async (req, res) => {
 		});
 
 		if (likerId) {
-			return res
+			 res
 				.status(401)
 				.json({ error: 'Cet utilisateur a déjà liké ce post' });
 		}
@@ -46,7 +46,7 @@ exports.likePost = async (req, res) => {
 		});
 
 		if (dislikerId) {
-			return res
+			 res
 				.status(401)
 				.json({ error: 'Cet utilisateur a déjà disliké ce post' });
 		}
@@ -114,3 +114,21 @@ exports.deleteLike = async (req, res) => {
 	}
 };
 /* ******************** deleteLike end ******************** */
+
+/* ******************** readCommentPost ******************** */
+// permet de voir tous les commentaires
+exports.readLikePost = async (req, res) => {
+	try {
+		const likes = await models.Like.findAll({
+			getIncludedAssociation: ['user'],
+		});
+		if (likes > []) {
+			res.status(200).json(likes);
+		} else {
+			return res.status(401).json({ error: "il n'y a pas de likes" });
+		}
+	} catch (error) {
+		res.status(400).json({ error: error.message });
+	}
+};
+/* ******************** readCommentPost end ******************** */

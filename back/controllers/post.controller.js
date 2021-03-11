@@ -13,7 +13,7 @@ exports.createPost = async (req, res) => {
 	let userId = jwtUtils.getUserId(req.cookies.jwt);
 	let filename;
 
-	if (req.file !== null) {
+	if (req.file != null ) {
 		try {
 			if (
 				req.file.detectedMimeType !== 'image/jpg' &&
@@ -51,7 +51,7 @@ exports.createPost = async (req, res) => {
 		const newPost = await models.Post.create({
 			title: title,
 			content: content,
-			imageUrl: req.file !== null ? './uploads/posts/' + filename : '',
+			imageUrl: req.file != null ? './uploads/posts/' + filename : '',
 			UserId: userId,
 		})
 			.then(newPost => res.status(200).json({ newPost }))
