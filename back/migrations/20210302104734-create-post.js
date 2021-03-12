@@ -6,7 +6,8 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
       },
       userId: {
         allowNull: false,
@@ -14,39 +15,38 @@ module.exports = {
         references: {
           model: 'Users',
           key: 'id'
-        }
-      },
-      title: {
-        allowNull: false,
-        type: Sequelize.STRING
+        },
+        onDelete: 'CASCADE',
       },
       content: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        onDelete: 'CASCADE',
       },
       imageUrl: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        onDelete: 'CASCADE',
       },
       likes: {
         allowNull: true,
         type: Sequelize.INTEGER,
-      },
-      dislikes: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
       },
       comments: {
         allowNull: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        onDelete: 'CASCADE',
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        onDelete: 'CASCADE',
       }
     });
   },

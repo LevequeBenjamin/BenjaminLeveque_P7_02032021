@@ -18,17 +18,19 @@ module.exports = (sequelize, DataTypes) => {
 			models.Post.belongsToMany(models.User, {
 				through: models.Comment,
 				foreignKey: 'postId',
-				otherKey: 'userId',
+				otherKey: 'userId',				
 			});
 
 			models.Comment.belongsTo(models.User, {
 				foreignKey: 'userId',
 				as: 'user',
+				onDelete: 'cascade'
 			});
 
 			models.Comment.belongsTo(models.Post, {
 				foreignKey: 'postId',
 				as: 'post',
+				onDelete: 'cascade'
 			});
 		}
 	}
@@ -46,6 +48,13 @@ module.exports = (sequelize, DataTypes) => {
 				references: {
 					model: 'Post',
 					key: 'id',
+				},
+			},
+			commenterId: {
+				type: DataTypes.STRING,
+				references: {
+					model: 'User',
+					key: 'username',
 				},
 			},
 			content: DataTypes.STRING,

@@ -24,6 +24,7 @@ exports.commentPost = async (req, res) => {
 		const newComment = await models.Comment.create({
 			postId: postId,
 			userId: user.id,
+			commenterId: user.username,
 			content: req.body.content,
 		});
 

@@ -18,13 +18,12 @@ const LikeButton = ({ post }) => {
 	};
 
 	const unlike = () => {};
-
+	
 	useEffect(() => {
 		!isEmpty(likeData[0]) &&
+		
 			likeData.map(like => {
 				for (let i = 0; i < likeData.length; i++) {
-					console.log(uid);
-					console.log(likeData[i].userId);
 					if (likeData[i].userId === uid && post.id === likeData[i].postId) {
 						setLiked(true)
 					} 

@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-
 			models.Post.belongsTo(models.User, {
 				foreignKey: {
 					allowNull: false,
@@ -19,12 +18,9 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	Post.init(
 		{
-			//idUSERS: DataTypes.INTEGER,
-			title: DataTypes.STRING,
 			content: DataTypes.STRING,
 			imageUrl: DataTypes.STRING,
 			likes: DataTypes.INTEGER,
-			disLikes: DataTypes.INTEGER,
 			comments: DataTypes.INTEGER,
 		},
 		{

@@ -8,7 +8,6 @@ const pipeline = promisify(require('stream').pipeline);
 
 exports.createPost = async (req, res) => {
 	//Params
-	let title = req.body.title;
 	let content = req.body.content;
 	let userId = jwtUtils.getUserId(req.cookies.jwt);
 	let filename;
@@ -38,7 +37,7 @@ exports.createPost = async (req, res) => {
 		);
 	}
 
-	if (title == null || content == null) {
+	if (content == null) {
 		return res.status(400).json({ error: 'paramètres manquants' });
 	}
 	try {
@@ -49,7 +48,6 @@ exports.createPost = async (req, res) => {
 			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
 		}
 		const newPost = await models.Post.create({
-			title: title,
 			content: content,
 			imageUrl: req.file != null ? './uploads/posts/' + filename : '',
 			UserId: userId,

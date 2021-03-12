@@ -19,8 +19,9 @@ export const likePost = (postId, userId) => {
 	return dispatch => {
 		return axios({
 			method: 'patch',
-			url: `${process.env.REACT_APP_API_URL}api/post/like-post/` + postId,
-			data: { id: userId },
+			url: `${process.env.REACT_APP_API_URL}api/post/like-post/${postId}`,
+			data: { userId, postId },
+			
 		})
 			.then(res => {
 				dispatch({ type: LIKE_POST, payload: { postId, userId } });

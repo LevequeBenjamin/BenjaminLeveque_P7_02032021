@@ -6,7 +6,8 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
       },
       userId: {
         allowNull: false,
@@ -15,6 +16,7 @@ module.exports = {
 					model: 'Users',
 					key: 'id',
 				},
+        onDelete: 'CASCADE',
       },
       postId: {
         allowNull: false,
@@ -23,18 +25,31 @@ module.exports = {
 					model: 'Posts',
 					key: 'id',
 				},
+        onDelete: 'CASCADE',
+      },
+      commenterId: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        references: {
+					model: 'Users',
+					key: 'username',
+				},
+        onDelete: 'CASCADE',
       },
       content: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        onDelete: 'CASCADE',
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        onDelete: 'CASCADE',
       }
     });
   },

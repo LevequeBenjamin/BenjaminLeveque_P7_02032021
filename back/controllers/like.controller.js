@@ -5,7 +5,7 @@ const models = require('../models');
 const jwtUtils = require('../utils/jwt.utils');
 
 // constants
-const LIKED = 1;
+//const LIKED = 1;
 
 /* ******************** likePost ******************** */
 // permet de liker un post
@@ -20,7 +20,7 @@ exports.likePost = async (req, res) => {
 			where: { id: userId },
 		});
 		if (!user) {
-			 res.status(401).json({ error: 'Utilisateur non trouvé !' });
+			 res.status(200).json({ error: 'Utilisateur non trouvé !' });
 		}
 
 		// on contrôle si l'utilisateur à déjà liké le post
@@ -33,32 +33,32 @@ exports.likePost = async (req, res) => {
 
 		if (likerId) {
 			 res
-				.status(401)
+				.status(200)
 				.json({ error: 'Cet utilisateur a déjà liké ce post' });
 		}
 
-		// on contrôle si l'utilisateur à déjà disliké le post
-		const dislikerId = await models.DisLike.findOne({
-			where: {
-				userId: userId,
-				postId: postId,
-			},
-		});
+		// // on contrôle si l'utilisateur à déjà disliké le post
+		// const dislikerId = await models.DisLike.findOne({
+		// 	where: {
+		// 		userId: userId,
+		// 		postId: postId,
+		// 	},
+		// });
 
-		if (dislikerId) {
-			 res
-				.status(401)
-				.json({ error: 'Cet utilisateur a déjà disliké ce post' });
-		}
+		// if (dislikerId) {
+		// 	 res
+		// 		.status(200)
+		// 		.json({ error: 'Cet utilisateur a déjà disliké ce post' });
+		// }
 
 		// création du like
 		await models.Like.create({
 			postId: postId,
 			userId: user.id,
-			isLike: LIKED,
+			//isLike: LIKED,
 		})
 			.then(res.status(200).json({ message: 'post liké' }))
-			.catch(error => res.status(500).json({ error }));
+			.catch(error => res.status(200).json({ error }));
 		const postFound = await models.Post.findOne({
 			where: { id: postId },
 		});
@@ -68,10 +68,10 @@ exports.likePost = async (req, res) => {
 				likes: postFound.likes + 1,
 			});
 		} else {
-			res.status(400).json({ error: 'impossible de récupérer le post' });
+			res.status(200).json({ error: 'impossible de récupérer le post' });
 		}
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(200).json({ error });
 	}
 };
 /* ******************** likePost end ******************** */

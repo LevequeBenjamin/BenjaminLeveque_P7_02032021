@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deletePost, updatePost } from '../../actions/post.actions';
 import { dateParser, isEmpty } from '../Utils';
+import CardComments from './CardComments';
 import LikeButton from './LikeButton';
 
 const Card = ({ post }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isUpdated, setIsUpdated] = useState(false);
 	const [textUpdate, setTextUpdate] = useState(null);
+	const [showComments, setShowComments] = useState(false);
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
+	const dispatch = useDispatch();
 	//const commentData = useSelector(state => state.commentReducer);
 	//const likeData = useSelector(state => state.likeReducer);
 
-	const updateItem = async () => {};
+	const updateItem = () => {
+		if (textUpdate) {
+			dispatch(updatePost(post.id, textUpdate));
+		}
+		setIsUpdated(false);
+	};
+
+	const deleteQuote = () => dispatch(deletePost(post.id));
 
 	useEffect(() => {
 		!isEmpty(usersData[0]) && setIsLoading(false);
@@ -80,15 +91,32 @@ const Card = ({ post }) => {
 							></iframe>
 						)}
 						{userData.id === post.UserId && (
-							<button className="button-container">
+							<div className="button-container">
 								<div onClick={() => setIsUpdated(!isUpdated)}>
 									<img src="./img/icons/edit.svg" alt="edit" />
 								</div>
-							</button>
+								<div
+									onClick={() => {
+										if (
+											window.confirm(
+												'Voulez-vous vraiment supprimer ce message ?',
+											)
+										) {
+											deleteQuote();
+										}
+									}}
+								>
+									<img src="./img/icons/trash.svg" alt="trash" />
+								</div>
+							</div>
 						)}
 						<div className="card-footer">
 							<div className="comment-icon">
-								<img src="./img/icons/message1.svg" alt="comments" />
+								<img
+									onClick={() => setShowComments(!showComments)}
+									src="./img/icons/message1.svg"
+									alt="comments"
+								/>
 								<span>{post.comments}</span>
 							</div>
 							<div>
@@ -96,6 +124,7 @@ const Card = ({ post }) => {
 							</div>
 							<img src="./img/icons/share.svg" alt="share" />
 						</div>
+						{showComments && <CardComments post={post} />}
 					</div>
 				</>
 			)}

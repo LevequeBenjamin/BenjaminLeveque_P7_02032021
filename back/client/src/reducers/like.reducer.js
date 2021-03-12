@@ -9,8 +9,7 @@ export default function likeReducer(state = initialState, action) {
 		case LIKE_POST:
 			return {
 				...state,
-				userId: action.payload,
-				postId: action.payload,
+				Like: action.payload
 			};
 
 		default:
