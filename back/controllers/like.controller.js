@@ -10,10 +10,12 @@ const jwtUtils = require('../utils/jwt.utils');
 /* ******************** likePost ******************** */
 // permet de liker un post
 exports.likePost = async (req, res) => {
-	try {
+	try{
 		// authentification de l'utilisateur
-		let userId = jwtUtils.getUserId(req.cookies.jwt);
+		//let userId = jwtUtils.getUserId(req.cookies.jwt);
+		let userId = req.params.liker
 		let postId = req.params.id;
+		//console.log(test)
 
 		// on contrôle si l'utilisateur existe dans la bd
 		const user = await models.User.findOne({
@@ -54,22 +56,22 @@ exports.likePost = async (req, res) => {
 		// création du like
 		await models.Like.create({
 			postId: postId,
-			userId: user.id,
+			userId: userId
 			//isLike: LIKED,
 		})
-			.then(res.status(200).json({ message: 'post liké' }))
+			.then(like => res.status(200).json({ like }))
 			.catch(error => res.status(200).json({ error }));
-		const postFound = await models.Post.findOne({
-			where: { id: postId },
-		});
-		if (postFound) {
-			// on met à jour le nombre de like dans le post
-			await postFound.update({
-				likes: postFound.likes + 1,
-			});
-		} else {
-			res.status(200).json({ error: 'impossible de récupérer le post' });
-		}
+		// const postFound = await models.Post.findOne({
+		// 	where: { id: postId },
+		// });
+		// if (postFound) {
+		// 	// on met à jour le nombre de like dans le post
+		// 	await postFound.update({
+		// 		likers: + userId,
+		// 	});
+		// } else {
+		// 	res.status(200).json({ error: 'impossible de récupérer le post' });
+		// }
 	} catch (error) {
 		res.status(200).json({ error });
 	}
@@ -81,7 +83,8 @@ exports.likePost = async (req, res) => {
 exports.deleteLike = async (req, res) => {
 	try {
 		// authentification de l'utilisateur
-		let userId = jwtUtils.getUserId(req.cookies.jwt);
+		//let userId = jwtUtils.getUserId(req.cookies.jwt);
+		let userId = req.params.liker
 		let postId = req.params.id;
 
 		// on contrôle si l'utilisateur existe dans la bd
@@ -89,26 +92,28 @@ exports.deleteLike = async (req, res) => {
 			where: { id: userId },
 		});
 		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+			 res.status(401).json({ error: 'Utilisateur non trouvé !' });
 		}
 
 		// on supprime le dislike
 		await models.Like.destroy({
-			where: { userId: userId },
+			where: { userId: userId,
+							 postId: postId							
+			},
 		})
 			.then(res.status(200).json({ message: 'le like est supprimé' }))
 			.catch(error => res.status(500).json({ error }));
 		const postFound = await models.Post.findOne({
-			where: { id: postId },
-		});
-		if (postFound) {
-			// on met à jour le nombre de dislike dans le post
-			await postFound.update({
-				likes: postFound.likes - 1,
-			});
-		} else {
-			res.status(400).json({ error: 'impossible de récupérer le post' });
-		}
+		 	where: { id: postId },
+		 });
+		//  if (postFound) {
+		// 	// on met à jour le nombre de dislike dans le post
+		//  	await postFound.decrement({
+		// 		likers: postFound.likers - userId,
+		// 	});
+		// } else {
+		// 	res.status(400).json({ error: 'impossible de récupérer le post' });
+		// }
 	} catch (error) {
 		res.status(500).json({ error });
 	}
@@ -120,12 +125,13 @@ exports.deleteLike = async (req, res) => {
 exports.readLikePost = async (req, res) => {
 	try {
 		const likes = await models.Like.findAll({
-			getIncludedAssociation: ['user'],
+
+			attributes: ['id', 'userId', 'postId']
 		});
 		if (likes > []) {
 			res.status(200).json(likes);
 		} else {
-			return res.status(401).json({ error: "il n'y a pas de likes" });
+			 res.status(200).json({ error: "il n'y a pas de likes" });
 		}
 	} catch (error) {
 		res.status(400).json({ error: error.message });

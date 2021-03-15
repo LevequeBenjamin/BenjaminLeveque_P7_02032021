@@ -3,6 +3,7 @@ import axios from 'axios';
 // comments
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
+export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 
 export const getComments = () => {
 	return dispatch => {
@@ -15,16 +16,32 @@ export const getComments = () => {
 	};
 };
 
-export const addComment = (postId, commenterId, content, userId) => {
-	return (dispatch) => {
-		return axios({
-				method: 'patch',
-				url: `${process.env.REACT_APP_API_URL}api/post/${postId}/comment-post`,
-				data: { content, commenterId, userId },
-			})
-				.then(res => {
-					dispatch({ type: ADD_COMMENT, payload: { postId } });
-				})
-				.catch(err => console.log(err))
-		}
-	}
+export const addComment = (post, userData, content) => {
+	let commenterId = userData.username;
+
+	return dispatch => {
+		return axios.patch(
+			`${process.env.REACT_APP_API_URL}api/post/${post.id}/comment-post/${userData.id}`,
+			{ content, commenterId },
+		);
+	};
+};
+
+export const deleteComment = (post, userData) => {
+	return dispatch => {
+		return axios.delete(
+			`${process.env.REACT_APP_API_URL}api/post/${post.id}/delete-comment-post/${userData.id}`,
+		);
+	};
+};
+
+export const updateComment = (commentId, content) => {
+	return dispatch => {
+		return axios.patch(
+			`${process.env.REACT_APP_API_URL}api/post/comment-post/${commentId}` ,{content},
+		).then(res => {
+			dispatch({ type: UPDATE_COMMENT, payload: {commentId, content } });
+		})
+		.catch(err => console.log(err));
+	} 
+}

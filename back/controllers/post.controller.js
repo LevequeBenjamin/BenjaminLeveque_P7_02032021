@@ -9,7 +9,8 @@ const pipeline = promisify(require('stream').pipeline);
 exports.createPost = async (req, res) => {
 	//Params
 	let content = req.body.content;
-	let userId = jwtUtils.getUserId(req.cookies.jwt);
+	//let userId = jwtUtils.getUserId(req.cookies.jwt);
+	let userId = req.body.userId;
 	let filename;
 
 	if (req.file != null ) {
@@ -38,19 +39,20 @@ exports.createPost = async (req, res) => {
 	}
 
 	if (content == null) {
-		return res.status(400).json({ error: 'paramètres manquants' });
+		 res.status(200).json({ error: 'paramètres manquants' });
 	}
 	try {
 		const user = await models.User.findOne({
 			where: { id: userId },
 		});
 		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+			 res.status(401).json({ error: 'Utilisateur non trouvé !' });
 		}
 		const newPost = await models.Post.create({
 			content: content,
 			imageUrl: req.file != null ? './uploads/posts/' + filename : '',
 			UserId: userId,
+			video: req.body.video
 		})
 			.then(newPost => res.status(200).json({ newPost }))
 			.catch(error => res.status(500).json({ error }));

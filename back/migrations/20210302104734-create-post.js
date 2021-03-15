@@ -20,7 +20,7 @@ module.exports = {
       },
       content: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         onDelete: 'CASCADE',
       },
       imageUrl: {
@@ -28,9 +28,9 @@ module.exports = {
         type: Sequelize.STRING,
         onDelete: 'CASCADE',
       },
-      likes: {
+      video: {
         allowNull: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         onDelete: 'CASCADE',
       },
       comments: {

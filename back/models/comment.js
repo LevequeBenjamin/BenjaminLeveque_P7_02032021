@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
 					key: 'username',
 				},
 			},
-			content: DataTypes.STRING,
+			content: DataTypes.TEXT,
 		},
 		{
 			sequelize,

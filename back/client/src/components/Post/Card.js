@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePost, updatePost } from '../../actions/post.actions';
+import { getLikes } from '../../actions/like.actions';
+import { deletePost, getPosts, updatePost } from '../../actions/post.actions';
 import { dateParser, isEmpty } from '../Utils';
 import CardComments from './CardComments';
 import LikeButton from './LikeButton';
@@ -14,7 +15,8 @@ const Card = ({ post }) => {
 	const userData = useSelector(state => state.userReducer);
 	const dispatch = useDispatch();
 	//const commentData = useSelector(state => state.commentReducer);
-	//const likeData = useSelector(state => state.likeReducer);
+	const likeData = useSelector(state => state.likeReducer);
+	const commentData = useSelector(state => state.commentReducer);
 
 	const updateItem = () => {
 		if (textUpdate) {
@@ -23,7 +25,11 @@ const Card = ({ post }) => {
 		setIsUpdated(false);
 	};
 
-	const deleteQuote = () => dispatch(deletePost(post.id));
+	const deleteQuote = async () => {
+		await dispatch(deletePost(post.id));
+		dispatch(getPosts());
+		dispatch(getLikes());
+	};
 
 	useEffect(() => {
 		!isEmpty(usersData[0]) && setIsLoading(false);
@@ -62,7 +68,7 @@ const Card = ({ post }) => {
 							</div>
 							<span>{dateParser(post.createdAt)}</span>
 						</div>
-						{isUpdated == false && <p>{post.content}</p>}
+						{isUpdated === false && <p>{post.content}</p>}
 						{isUpdated && (
 							<div className="update-post">
 								<textarea
@@ -117,14 +123,29 @@ const Card = ({ post }) => {
 									src="./img/icons/message1.svg"
 									alt="comments"
 								/>
+						
+
+
+
+
 								<span>{post.comments}</span>
 							</div>
 							<div>
-								<LikeButton post={post} />
+								<LikeButton
+									key={!isEmpty(likeData[0] && likeData.map(likeDb => likeDb.id))} post={post} 
+									postUsersLike={
+										!isEmpty(post.Users[0]) &&
+										post.Users.map(likersId => {
+											if (likersId.Like) return likersId.Like.userId;
+											else return null;
+										})
+									}
+								/>
 							</div>
 							<img src="./img/icons/share.svg" alt="share" />
 						</div>
-						{showComments && <CardComments post={post} />}
+						
+						{showComments &&<CardComments post={post}/>}
 					</div>
 				</>
 			)}

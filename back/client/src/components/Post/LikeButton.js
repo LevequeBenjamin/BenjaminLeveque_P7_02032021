@@ -4,32 +4,38 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { isEmpty } from '../Utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { likePost } from '../../actions/like.actions';
+import { getLikes, likePost, unlikePost } from '../../actions/like.actions';
+import { getPosts } from '../../actions/post.actions';
 
-const LikeButton = ({ post }) => {
+const LikeButton = ({ post, postUsersLike }) => {
 	const [liked, setLiked] = useState(false);
 	const uid = useContext(UidContext);
-	const likeData = useSelector(state => state.likeReducer);
 	const dispatch = useDispatch();
+	const likeData = useSelector(state => state.likeReducer);
 
 	const like = () => {
-		dispatch(likePost(post.id, uid));
+		dispatch(likePost(post, uid));
+
+		dispatch(getPosts());
+		dispatch(getLikes());
 		setLiked(true);
 	};
 
-	const unlike = () => {};
-	
+	const unlike = () => {
+		dispatch(unlikePost(post, uid));
+
+		dispatch(getPosts());
+		dispatch(getLikes());
+		setLiked(false);
+	};
+
 	useEffect(() => {
-		!isEmpty(likeData[0]) &&
-		
-			likeData.map(like => {
-				for (let i = 0; i < likeData.length; i++) {
-					if (likeData[i].userId === uid && post.id === likeData[i].postId) {
-						setLiked(true)
-					} 
-				} return null
-			});
-	}, [uid, likeData, liked, post, dispatch]);
+		if (!isEmpty(postUsersLike[0]) && postUsersLike.includes(uid)) {
+			setLiked(true);
+		} else setLiked(false);
+	}, [uid, postUsersLike, liked]);
+
+	console.log(postUsersLike);
 
 	return (
 		<div className="like-container">
@@ -42,12 +48,16 @@ const LikeButton = ({ post }) => {
 					<div>Connectez-vous pour aimer un post !</div>
 				</Popup>
 			)}
+
 			{uid && liked === false && (
 				<img src="./img/icons/heart.svg" onClick={like} alt="like" />
 			)}
+
 			{uid && liked && (
 				<img src="./img/icons/heart-filled.svg" onClick={unlike} alt="unlike" />
 			)}
+
+			<span>{post.Users.length}</span>
 		</div>
 	);
 };
