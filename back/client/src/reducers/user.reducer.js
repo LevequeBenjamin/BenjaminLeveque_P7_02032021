@@ -1,7 +1,12 @@
+// ******************** comment.actions ******************** //
+
+// imports
 import { GET_USER, UPDATE_BIO, UPLOAD_PICTURE } from '../actions/user.actions';
 
+// const
 const initialState = {};
 
+/* ******************** userReducer ******************** */
 export default function userReducer(state = initialState, action) {
 	switch (action.type) {
 		case GET_USER:
@@ -21,3 +26,4 @@ export default function userReducer(state = initialState, action) {
 			return state;
 	}
 }
+/* ******************** userReducer end ******************** */

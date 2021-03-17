@@ -1,15 +1,18 @@
+// ******************** components/Thread ******************** //
+
+// imports
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from '../actions/post.actions';
 import Card from './Post/Card';
 import { isEmpty } from './Utils';
 
+/* ******************** Thread ******************** */
 const Thread = () => {
 	const [loadPost, setLoadPost] = useState(true);
 	const [count, setCount] = useState(5);
 	const dispatch = useDispatch();
 	const posts = useSelector(state => state.postReducer);
-	//const usersData = useSelector(state => state.usersReducer);
 
 	const loadMore = () => {
 		if (
@@ -40,5 +43,7 @@ const Thread = () => {
 		</div>
 	);
 };
+/* ******************** Thread end ******************** */
 
+// export
 export default Thread;

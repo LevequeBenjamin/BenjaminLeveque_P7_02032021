@@ -1,35 +1,39 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateComment } from '../../actions/comment.actions';
-import { UidContext } from '../AppContext';
-import { isEmpty } from '../Utils';
+// ******************** components/Post/EditDeleteComment ******************** //
 
-const EditDeleteComment = (comment) => {
+// imports
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteComment, updateComment } from '../../actions/comment.actions';
+import { getPosts } from '../../actions/post.actions';
+import { UidContext } from '../AppContext';
+
+/* ******************** EditDeleteComment ******************** */
+const EditDeleteComment = ({comment, post}) => {
 	const [isAuthor, setIsAuthor] = useState(false);
 	const [edit, setEdit] = useState(false);
 	const [content, setContent] = useState('');
 	const uid = useContext(UidContext);
 	const dispatch = useDispatch();
 
-let commentId = comment.comment.id;
-let commentUserId = comment.comment.userId;
+	let commentId = comment.id;
+	let postId = post.id;
+	const handleEdit = e => {
+		e.preventDefault();
+		if (content) dispatch(updateComment(commentId, content));
+	};
+	const handleDelete = async() => {
+		await dispatch(deleteComment(commentId, postId))
+		 dispatch(getPosts())
+	}
 
-	 const handleEdit = (e) => {
-	 	e.preventDefault();
-
-	 	if (content) {
-	 		dispatch(updateComment(commentId, content));
-	 	}
-	 };
-
-	 useEffect(() => {
-	 	const checkAuthor = () => {
-			if (uid === commentUserId) {
+	useEffect(() => {
+		const checkAuthor = () => {
+			if (uid === comment.userId) {
 				setIsAuthor(true);
 			} else setIsAuthor(false);
 		};
- 	checkAuthor();
-	}, [uid, commentUserId]);
+		checkAuthor();
+	}, [uid, comment.userId]);
 
 	return (
 		<div className="edit-comment">
@@ -48,14 +52,26 @@ let commentUserId = comment.comment.userId;
 						type="text"
 						name="content"
 						onChange={e => setContent(e.target.value)}
-						defaultValue={comment.comment.content}
+						defaultValue={comment.content}
 					/>
 					<br />
-					<input type="submit" value="Valider modification" />
+					<div className='btn'>
+						<span onClick={() => {
+							if(window.confirm('Voulez-vous supprimer ce commentaire ?')) {
+								handleDelete();
+							}
+						}}>
+							<img src='./img/icons/trash.svg' alt='delete' />
+						</span>
+						<input type="submit" value="Valider modification" />
+					</div>
+					
 				</form>
 			)}
 		</div>
 	);
 };
+/* ******************** EditDeleteComment end ******************** */
 
+// export
 export default EditDeleteComment;

@@ -5,7 +5,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/user.routes');
 const postRoutes = require('./routes/post.routes');
-const likeDislikeRoutes = require('./routes/likeDislike.routes');
+const likeRoutes = require('./routes/like.routes');
 const commentRoutes = require('./routes/comment.routes');
 const uploadRoutes = require('./routes/upload.routes');
 const { checkUser, requireAuth } = require('./middleware/auth.middleware');
@@ -24,19 +24,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// app.use((req, res, next) => {
-// 	res.setHeader('Access-Control-Allow-Origin', '*');
-// 	res.setHeader(
-// 		'Access-Control-Allow-Headers',
-// 		'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization',
-// 	);
-// 	res.setHeader(
-// 		'Access-Control-Allow-Methods',
-// 		'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-// 	);
-// 	next();
-// });
-
 // Middleware qui permet de transformer le corp de la requête en un objet JSON utilisable
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -51,7 +38,7 @@ app.get('/jwtid', requireAuth, (req, res) => {
 // routes
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
-app.use('/api/post', likeDislikeRoutes);
+app.use('/api/post', likeRoutes);
 app.use('/api/post', commentRoutes);
 app.use('/api/user', uploadRoutes);
 

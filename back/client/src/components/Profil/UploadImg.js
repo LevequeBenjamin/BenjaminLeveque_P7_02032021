@@ -1,7 +1,11 @@
+// ******************** components/Profil/UploadImg ******************** //
+
+// imports
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadPicture } from '../../actions/user.actions';
 
+/* ******************** UploadImg ******************** */
 const UploadImg = () => {
 	const [file, setFile] = useState();
 	const dispatch = useDispatch();
@@ -14,7 +18,7 @@ const UploadImg = () => {
 		data.append('userId', userData.id);
 		data.append('file', file);
 
-    dispatch(uploadPicture(data, userData.id));
+		dispatch(uploadPicture(data, userData.id));
 	};
 
 	return (
@@ -32,5 +36,7 @@ const UploadImg = () => {
 		</form>
 	);
 };
+/* ******************** UploadImg end ******************** */
 
+// export
 export default UploadImg;

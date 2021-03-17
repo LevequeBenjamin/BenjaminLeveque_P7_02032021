@@ -22,12 +22,12 @@ exports.getUser = async (req, res) => {
 		});
 
 		if (user) {
-			res.status(201).json(user);
+			res.status(200).send(user);
 		} else {
-			res.status(404).json({ error: 'user ' + req.params.id + ' not found !' });
+			res.status(404).send({ error: 'user ' + req.params.id + ' not found !' });
 		}
 	} catch (error) {
-		res.status(500).json({ error: 'cannot fetch user !' });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** getUser end ******************** */
@@ -49,12 +49,12 @@ exports.getAllUsers = async (req, res) => {
 			],
 		});
 		if (user) {
-			res.status(201).json(user);
+			res.status(200).send(user);
 		} else {
-			res.status(404).json({ error: 'users not found !' });
+			res.status(404).send({ error: 'users not found !' });
 		}
 	} catch (error) {
-		res.status(500).json({ error: 'cannot fetch user !' });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** getAllUsers end ******************** */
@@ -67,17 +67,14 @@ exports.updateUser = async (req, res) => {
 			attributes: ['bio', 'id'],
 			where: { id: req.params.id },
 		});
-		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
 		await user
 			.update({
 				bio: req.body.bio,
 			})
-			.then(res.status(201).json({ message: 'bio modifié !' }))
-			.catch(err => res.status(500).json(err));
-	} catch (err) {
-		res.status(500).json({ err });
+			.then(res.status(200).send({ message: 'bio modifié !' }))
+			.catch(error => res.status(400).send(error));
+	} catch (error) {
+		res.status(500).send({ error });
 	}
 };
 /* ******************** updateUser end ******************** */
@@ -86,21 +83,15 @@ exports.updateUser = async (req, res) => {
 // permet de supprimer un utilisateur
 exports.deleteUser = async (req, res) => {
 	try {
-		const user = await models.User.findOne({
-			where: { id: req.params.id },
-		});
-		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
 		await models.User.destroy({ where: { id: req.params.id } })
-			.then(user =>
+			.then(
 				res
 					.status(200)
-					.json({ message: 'user ' + req.params.id + ' supprimé !' }),
+					.send({ message: 'user ' + req.params.id + ' supprimé !' }),
 			)
-			.catch(error => res.status(500).json({ error }));
+			.catch(error => res.status(400).send({ error }));
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** deleteUser end ******************** */

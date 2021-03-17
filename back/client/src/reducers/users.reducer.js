@@ -1,7 +1,12 @@
+// ******************** users.reducer ******************** //
+
+// imports
 import { GET_USERS } from '../actions/users.actions';
 
+// const
 const initialState = {};
 
+/* ******************** usersReducer ******************** */
 export default function usersReducer(state = initialState, action) {
 	switch (action.type) {
 		case GET_USERS:
@@ -10,3 +15,4 @@ export default function usersReducer(state = initialState, action) {
 			return state;
 	}
 }
+/* ******************** usersReducer end ******************** */

@@ -1,7 +1,11 @@
+// ******************** components/Log/SignUpForm ******************** //
+
+// imports
 import React, { useState } from 'react';
 import axios from 'axios';
 import SignInForm from './SignInForm';
 
+/* ******************** SignUpForm ******************** */
 const SignUpForm = () => {
 	const [formSubmit, setFormSubmit] = useState(false);
 	const [username, setUsername] = useState('');
@@ -143,5 +147,7 @@ const SignUpForm = () => {
 		</>
 	);
 };
+/* ******************** SignUpForm end ******************** */
 
+// export
 export default SignUpForm;

@@ -1,6 +1,10 @@
+// ******************** components/Log/SignInForm ******************** //
+
+// imports
 import React, { useState } from 'react';
 import axios from 'axios';
 
+/* ******************** SignInForm ******************** */
 const SignInForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -67,5 +71,7 @@ const SignInForm = () => {
 		</form>
 	);
 };
+/* ******************** SignInForm end ******************** */
 
+// export
 export default SignInForm;

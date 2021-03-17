@@ -1,3 +1,5 @@
+// ******************** src/index ******************** //
+
 // imports
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,17 +12,21 @@ import rootReducer from './reducers';
 import { getUsers } from './actions/users.actions';
 import { getComments } from './actions/comment.actions';
 import { getLikes } from './actions/like.actions';
+import { getPosts } from './actions/post.actions';
 
 // dev tools
 import { composeWithDevTools } from 'redux-devtools-extension';
 import logger from 'redux-logger';
 
+// const
 const store = createStore(
 	rootReducer,
 	composeWithDevTools(applyMiddleware(thunk, logger)),
 );
 
+// store
 store.dispatch(getUsers());
+store.dispatch(getPosts());
 store.dispatch(getComments());
 store.dispatch(getLikes());
 

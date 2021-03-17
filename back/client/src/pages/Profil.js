@@ -1,8 +1,14 @@
+// ******************** pages/Profil ******************** //
+
+// import
 import React, { useContext } from 'react';
 import Log from '../components/Log';
 import { UidContext } from '../components/AppContext';
 import UpdateProfil from '../components/Profil/UpdateProfil';
+import NewPostForm from '../components/Post/NewPostForm';
+import ThreadProfil from '../components/Profil/PostProfil';
 
+/* ******************** Profil ******************** */
 const Profil = () => {
 	const uid = useContext(UidContext);
 
@@ -18,8 +24,14 @@ const Profil = () => {
 					</div>
 				</div>
 			)}
+			{ uid && <NewPostForm /> 
+			}
+			{ uid && <ThreadProfil />
+			}
 		</div>
 	);
 };
+/* ******************** Profil end ******************** */
 
+// export
 export default Profil;

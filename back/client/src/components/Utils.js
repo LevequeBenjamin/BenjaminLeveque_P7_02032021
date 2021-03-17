@@ -1,3 +1,6 @@
+// ******************** components/Utils ******************** //
+
+/* ******************** dateParser ******************** */
 export const dateParser = num => {
 	let options = {
 		hour: '2-digit',
@@ -15,8 +18,10 @@ export const dateParser = num => {
 
 	return date.toString();
 };
+/* ******************** dateParser end ******************** */
 
-export const timestamParser = (num) => {
+/* ******************** timestamPaser ******************** */
+export const timestamParser = num => {
 	let options = {
 		hour: '2-digit',
 		minute: '2-digit',
@@ -30,8 +35,10 @@ export const timestamParser = (num) => {
 	let date = new Date(num).toLocaleDateString('fr-FR', options);
 
 	return date.toString();
-}
+};
+/* ******************** timestamParser end ******************** */
 
+/* ******************** isEmpty ******************** */
 export const isEmpty = value => {
 	return (
 		value === undefined ||
@@ -40,3 +47,4 @@ export const isEmpty = value => {
 		(typeof value === 'string' && value.trim().length === 0)
 	);
 };
+/* ******************** isEmpty end ******************** */

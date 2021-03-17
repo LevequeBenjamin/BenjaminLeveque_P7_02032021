@@ -1,79 +1,24 @@
-// ******************** dislike.controller ******************** //
+// ******************** like.controller ******************** //
 
 // imports
 const models = require('../models');
-const jwtUtils = require('../utils/jwt.utils');
-
-// constants
-//const LIKED = 1;
 
 /* ******************** likePost ******************** */
 // permet de liker un post
 exports.likePost = async (req, res) => {
-	try{
-		// authentification de l'utilisateur
-		//let userId = jwtUtils.getUserId(req.cookies.jwt);
-		let userId = req.params.liker
+	try {
+		let userId = req.params.liker;
 		let postId = req.params.id;
-		//console.log(test)
-
-		// on contrôle si l'utilisateur existe dans la bd
-		const user = await models.User.findOne({
-			where: { id: userId },
-		});
-		if (!user) {
-			 res.status(200).json({ error: 'Utilisateur non trouvé !' });
-		}
-
-		// on contrôle si l'utilisateur à déjà liké le post
-		const likerId = await models.Like.findOne({
-			where: {
-				userId: userId,
-				postId: postId,
-			},
-		});
-
-		if (likerId) {
-			 res
-				.status(200)
-				.json({ error: 'Cet utilisateur a déjà liké ce post' });
-		}
-
-		// // on contrôle si l'utilisateur à déjà disliké le post
-		// const dislikerId = await models.DisLike.findOne({
-		// 	where: {
-		// 		userId: userId,
-		// 		postId: postId,
-		// 	},
-		// });
-
-		// if (dislikerId) {
-		// 	 res
-		// 		.status(200)
-		// 		.json({ error: 'Cet utilisateur a déjà disliké ce post' });
-		// }
 
 		// création du like
 		await models.Like.create({
 			postId: postId,
-			userId: userId
-			//isLike: LIKED,
+			userId: userId,
 		})
-			.then(like => res.status(200).json({ like }))
-			.catch(error => res.status(200).json({ error }));
-		// const postFound = await models.Post.findOne({
-		// 	where: { id: postId },
-		// });
-		// if (postFound) {
-		// 	// on met à jour le nombre de like dans le post
-		// 	await postFound.update({
-		// 		likers: + userId,
-		// 	});
-		// } else {
-		// 	res.status(200).json({ error: 'impossible de récupérer le post' });
-		// }
+			.then(like => res.status(201).send({ like }))
+			.catch(error => res.status(400).send({ error }));
 	} catch (error) {
-		res.status(200).json({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** likePost end ******************** */
@@ -82,59 +27,35 @@ exports.likePost = async (req, res) => {
 // permet d'annuler un like
 exports.deleteLike = async (req, res) => {
 	try {
-		// authentification de l'utilisateur
-		//let userId = jwtUtils.getUserId(req.cookies.jwt);
-		let userId = req.params.liker
+		let userId = req.params.liker;
 		let postId = req.params.id;
-
-		// on contrôle si l'utilisateur existe dans la bd
-		const user = await models.User.findOne({
-			where: { id: userId },
-		});
-		if (!user) {
-			 res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
 
 		// on supprime le dislike
 		await models.Like.destroy({
-			where: { userId: userId,
-							 postId: postId							
-			},
+			where: { userId: userId, postId: postId },
 		})
-			.then(res.status(200).json({ message: 'le like est supprimé' }))
-			.catch(error => res.status(500).json({ error }));
-		const postFound = await models.Post.findOne({
-		 	where: { id: postId },
-		 });
-		//  if (postFound) {
-		// 	// on met à jour le nombre de dislike dans le post
-		//  	await postFound.decrement({
-		// 		likers: postFound.likers - userId,
-		// 	});
-		// } else {
-		// 	res.status(400).json({ error: 'impossible de récupérer le post' });
-		// }
+			.then(res.status(200).send({ message: 'le like est supprimé' }))
+			.catch(error => res.status(400).send({ error }));
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** deleteLike end ******************** */
 
-/* ******************** readCommentPost ******************** */
+/* ******************** readLikePost ******************** */
 // permet de voir tous les commentaires
 exports.readLikePost = async (req, res) => {
 	try {
 		const likes = await models.Like.findAll({
-
-			attributes: ['id', 'userId', 'postId']
+			attributes: ['id', 'userId', 'postId'],
 		});
 		if (likes > []) {
-			res.status(200).json(likes);
+			res.status(200).send(likes);
 		} else {
-			 res.status(200).json({ error: "il n'y a pas de likes" });
+			res.status(400).send({ error: "il n'y a pas de likes" });
 		}
 	} catch (error) {
-		res.status(400).json({ error: error.message });
+		res.status(500).send({ error });
 	}
 };
-/* ******************** readCommentPost end ******************** */
+/* ******************** readLikePost end ******************** */

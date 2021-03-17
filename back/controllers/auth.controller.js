@@ -8,7 +8,7 @@ const verifyInput = require('../middleware/verifyInput');
 const { signUpErrors } = require('../utils/errors.utils');
 require('dotenv').config({ path: '../config/.env' });
 
-// constants
+// const
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 /* ******************** signup ******************** */
@@ -16,29 +16,24 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 exports.signUp = async (req, res) => {
 	const { email, username, password, bio } = req.body;
 
-	// on contrôle que tous les champs soit rempli
-	//if (email == null || username == null || password == null) {
-	//return res.status(400).json({ error: 'paramètres manquants !' });
-	//}
-
 	// on valide les champs
 	let emailTrue = verifyInput.validEmail(email);
 	let passwordTrue = verifyInput.validPassword(password);
 	let usernameTrue = verifyInput.validUsername(username);
 
 	if (usernameTrue == false) {
-		res.status(200).json({
+		res.status(200).send({
 			errorUsername:
 				'username non valid ! (Il doit contenir entre 3 et 36 caractères et ne pas contenir de caractères spécial)',
 		});
 	}
 
 	if (emailTrue == false) {
-		res.status(200).json({ errorEmail: 'email non valide !' });
+		res.status(200).send({ errorEmail: 'email non valide !' });
 	}
 
 	if (passwordTrue == false) {
-		res.status(200).json({
+		res.status(200).send({
 			errorPassword:
 				'password non valide !(Il doit contenir entre 8 et 42 caractères, au moins un chiffre, une majuscule, une minuscule et un caractère spécial !',
 		});
@@ -56,10 +51,10 @@ exports.signUp = async (req, res) => {
 					bio,
 					isAdmin: 0,
 				});
-				res.status(201).json({ user: user.id });
+				res.status(201).send({ user: user.id });
 			} catch (err) {
 				const errors = signUpErrors(err);
-				res.status(200).send({ errors });
+				res.status(401).send({ errors });
 			}
 		});
 	}
@@ -73,13 +68,13 @@ exports.login = async (req, res) => {
 
 	// on contrôle que tous les champs soit rempli
 	if (email == null || password == null) {
-		res.status(200).json({ error: 'paramètres manquants' });
+		res.status(200).send({ error: 'paramètres manquants' });
 	}
 	try {
 		// on contrôle si l'email existe dans la bd
 		const user = await models.User.findOne({ where: { email: email } });
 		if (!user) {
-			res.status(200).json({ errorEmail: 'Email inconnu' });
+			res.status(200).send({ errorEmail: 'Email inconnu' });
 		}
 		await bcrypt
 			// on compare le password
@@ -88,18 +83,18 @@ exports.login = async (req, res) => {
 				if (!valid) {
 					res
 						.status(200)
-						.json({ errorPassword: 'Le mot de passe ne correspond pas' });
+						.send({ errorPassword: 'Le mot de passe ne correspond pas' });
 				}
 				// on crée un token est on le passe dans le cookie
 				const token = jwtUtils.generateTokenForUser(user);
 				res.cookie('jwt', token, { httpOnly: true, maxAge });
-				res.status(200).json({
+				res.status(200).send({
 					id: user.id,
 				});
 			})
-			.catch(error => res.status(500).json({ error }));
+			.catch(error => res.status(500).send({ error }));
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** login end ******************** */

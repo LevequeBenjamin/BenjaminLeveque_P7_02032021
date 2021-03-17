@@ -1,3 +1,6 @@
+// ******************** components/Post/LikeButton ******************** //
+
+// imports
 import React, { useContext, useEffect, useState } from 'react';
 import { UidContext } from '../AppContext';
 import Popup from 'reactjs-popup';
@@ -7,25 +10,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getLikes, likePost, unlikePost } from '../../actions/like.actions';
 import { getPosts } from '../../actions/post.actions';
 
+/* ******************** LikeButton ******************** */
 const LikeButton = ({ post, postUsersLike }) => {
 	const [liked, setLiked] = useState(false);
 	const uid = useContext(UidContext);
 	const dispatch = useDispatch();
 	const likeData = useSelector(state => state.likeReducer);
+	let likeId =
+		!isEmpty(likeData[0]) &&
+		likeData.map(likesId => {
+			return likesId.id;
+		});
 
-	const like = () => {
-		dispatch(likePost(post, uid));
-
-		dispatch(getPosts());
+	const getLikesPosts = () => {
 		dispatch(getLikes());
+		dispatch(getPosts());
+	};
+
+	const like = async () => {
+		await dispatch(likePost(post, uid));
+
+		getLikesPosts();
 		setLiked(true);
 	};
 
-	const unlike = () => {
-		dispatch(unlikePost(post, uid));
+	const unlike = async () => {
+		await dispatch(unlikePost(post, uid, likeId));
 
-		dispatch(getPosts());
-		dispatch(getLikes());
+		//getLikesPosts();
+
 		setLiked(false);
 	};
 
@@ -34,8 +47,6 @@ const LikeButton = ({ post, postUsersLike }) => {
 			setLiked(true);
 		} else setLiked(false);
 	}, [uid, postUsersLike, liked]);
-
-	console.log(postUsersLike);
 
 	return (
 		<div className="like-container">
@@ -50,16 +61,28 @@ const LikeButton = ({ post, postUsersLike }) => {
 			)}
 
 			{uid && liked === false && (
-				<img src="./img/icons/heart.svg" onClick={like} alt="like" />
+				<img
+					src="./img/icons/heart.svg"
+					onClick={like}
+					alt="like"
+					key={likeId}
+				/>
 			)}
 
 			{uid && liked && (
-				<img src="./img/icons/heart-filled.svg" onClick={unlike} alt="unlike" />
+				<img
+					src="./img/icons/heart-filled.svg"
+					onClick={unlike}
+					alt="unlike"
+					key={likeId}
+				/>
 			)}
 
 			<span>{post.Users.length}</span>
 		</div>
 	);
 };
+/* ******************** LikeButton end ******************** */
 
+// export
 export default LikeButton;

@@ -2,24 +2,15 @@
 
 // imports
 const models = require('../models');
-const jwtUtils = require('../utils/jwt.utils');
 
 /* ******************** commentPost ******************** */
 // permet de commenter un post
 exports.commentPost = async (req, res) => {
-	try{
-	let userId = req.params.userId;
-	let postId = req.params.id;
-	let commenterId = req.body.commenterId;
-	let content = req.body.content;
-	
-		// on contrôle si l'utilisateur existe dans la bd
-		const user = await models.User.findOne({
-			where: { id: userId },
-		});
-		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
+	try {
+		let userId = req.params.userId;
+		let postId = req.params.id;
+		let commenterId = req.body.commenterId;
+		let content = req.body.content;
 
 		// création du commentaire
 		const newComment = await models.Comment.create({
@@ -30,22 +21,22 @@ exports.commentPost = async (req, res) => {
 		});
 
 		if (newComment) {
-			res.status(200).json({ newComment });
+			res.status(201).send({ newComment });
 		} else {
-			res.status(401).json({ error: 'désolé, quelque chose à mal tourné' });
+			res.status(401).send({ error: 'désolé, quelque chose à mal tourné' });
 		}
-		//  const postFound = await models.Post.findOne({
-		//  	where: { id: postId },
-		//  });
-		//  if (postFound) {
-		//  	await postFound.update({
-		// 		comments: postFound.comments +1,
-		//  	});
-		//  } else {
-		//  	res.status(400).json({ error: 'cannot fetch user !' });
-		//  }
-	} catch (message) {
-		res.status(200).send({ message: "T'es vraiment pas loin!!" });
+		  const postFound = await models.Post.findOne({
+		  	where: { id: postId },
+		  });
+		  if (postFound) {
+		  	await postFound.update({
+		 		comments: postFound.comments +1,
+		  	});
+		  } else {
+		  	res.status(400).json({ error: 'cannot fetch user !' });
+		  }
+	} catch (error) {
+		res.status(400).send({ error });
 	}
 };
 /* ******************** commentPost end ******************** */
@@ -53,30 +44,32 @@ exports.commentPost = async (req, res) => {
 /* ******************** updatePost ******************** */
 // permet de commenter un post
 exports.updatePost = async (req, res) => {
-	try{
-	//let userId = req.params.userId;
-	let content = req.body.content;
-	let commentId = req.params.id;
-		// // on contrôle si l'utilisateur existe dans la bd
-		// const user = await models.User.findOne({
-		// 	where: { id: userId },
-		// });
-		// if (!user) {
-		// 	return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		// }
+	try {
+		let content = req.body.content;
+		let commentId = req.params.id;
+
 		const commentFound = await models.Comment.findOne({
-			 	where: { id: commentId },
-			  });
+			attributes: [
+				'id',
+				'userId',
+				'postId',
+				'commenterId',
+				'content',
+				'createdAt',
+				'updatedAt',
+			],
+			where: { id: commentId },
+		});
 
 		// création du commentaire
-		await commentFound.update({
-			content: content,
-		})
-		.then(comment => res.status(200).json({ comment }))
-		.catch(error => res.status(500).json({ error }));
-		
-	} catch (message) {
-		res.status(200).send({ message: "T'es vraiment pas loin!!" });
+		await commentFound
+			.update({
+				content: content,
+			})
+			.then(comment => res.status(200).send({ comment }))
+			.catch(error => res.status(500).send({ error }));
+	} catch (error) {
+		res.status(400).send({ error });
 	}
 };
 /* ******************** updateCommentPost end ******************** */
@@ -86,32 +79,32 @@ exports.updatePost = async (req, res) => {
 exports.readCommentPost = async (req, res) => {
 	try {
 		const comments = await models.Comment.findAll({
-			attributes: ['id', 'userId', 'postId', 'commenterId', 'content', 'createdAt', 'updatedAt']
+			attributes: [
+				'id',
+				'userId',
+				'postId',
+				'commenterId',
+				'content',
+				'createdAt',
+				'updatedAt',
+			],
 		});
 		if (comments > []) {
-			res.status(200).json(comments);
+			res.status(200).send(comments);
 		} else {
-			return res.status(401).json({ error: "il n'y a pas de commentaires" });
+			return res.status(400).send({ error: "il n'y a pas de commentaires" });
 		}
 	} catch (error) {
-		res.status(400).json({ error: error.message });
+		res.status(400).send({ error });
 	}
 };
 /* ******************** readCommentPost end ******************** */
 
+/* ******************** deleteCommentPost ******************** */
 exports.deleteCommentPost = async (req, res) => {
 	try {
-		// authentification de l'utilisateur
-		let userId = req.params.userId;
-		let commentId = req.params.id
-
-		// on contrôle si l'utilisateur existe dans la bd
-		const user = await models.User.findOne({
-			where: { id: userId },
-		});
-		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
+		let commentId = req.params.id;
+		let postId = req.params.postId;
 
 		// on contrôle que le commentaire existe dans la bd
 		const commentFound = await models.Comment.findOne({
@@ -119,25 +112,26 @@ exports.deleteCommentPost = async (req, res) => {
 		});
 
 		if (!commentFound) {
-			return res.status(401).json({ error: 'Commentaire non trouvé !' });
+			return res.status(400).send({ error: 'Commentaire non trouvé !' });
 		}
 
 		// suppression du commentaire
 		await models.Comment.destroy({
 			where: { id: commentId },
 		});
-		// const postFound = await models.Post.findOne({
-		// 	where: { id: postId },
-		// });
-		// if (postFound) {
-		// 	await postFound.update({
-		// 		comments: postFound.comments - 1,
-		// 	});
-		// } else {
-		// 	res.status(400).json({ error: 'cannot fetch user !' });
-		// }
-		res.status(200).json({ message: 'commentaire supprimé' });
+		 const postFound = await models.Post.findOne({
+		 	where: { id: postId },
+		 });
+		 if (postFound) {
+		 	await postFound.update({
+		 		comments: postFound.comments - 1,
+		 	});
+		 } else {
+		 	res.status(400).json({ error: 'cannot fetch user !' });
+		 }
+		res.status(200).send({ message: 'commentaire supprimé' });
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
+/* ******************** deleteCommentPost end ******************** */

@@ -1,6 +1,10 @@
+// ******************** components/LeftNav ******************** //
+
+// imports
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+/* ******************** LeftNav ******************** */
 const LeftNav = () => {
   return (
     <div className='left-nav-container'>
@@ -10,10 +14,10 @@ const LeftNav = () => {
             <img src='./img/icons/home.svg' alt='home' />
           </NavLink>
           <br />
-          <NavLink to='/trending' exact activeClassName='active-left-nav'>
+          {/* <NavLink to='/trending' exact activeClassName='active-left-nav'>
             <img src='./img/icons/rocket.svg' alt='home' />
           </NavLink>
-          <br />
+          <br /> */}
           <NavLink to='/profil' exact activeClassName='active-left-nav'>
             <img src='./img/icons/user.svg' alt='home' />
           </NavLink>
@@ -23,5 +27,7 @@ const LeftNav = () => {
     </div>
   );
 };
+/* ******************** LeftNav end ******************** */
 
+// export
 export default LeftNav;

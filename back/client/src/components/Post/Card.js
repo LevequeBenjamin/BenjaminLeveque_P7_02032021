@@ -1,11 +1,14 @@
+// ******************** components/Post/Card ******************** //
+
+// imports
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLikes } from '../../actions/like.actions';
-import { deletePost, getPosts, updatePost } from '../../actions/post.actions';
+import { deletePost, updatePost } from '../../actions/post.actions';
 import { dateParser, isEmpty } from '../Utils';
 import CardComments from './CardComments';
 import LikeButton from './LikeButton';
 
+/* ******************** Card ******************** */
 const Card = ({ post }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isUpdated, setIsUpdated] = useState(false);
@@ -14,9 +17,6 @@ const Card = ({ post }) => {
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
 	const dispatch = useDispatch();
-	//const commentData = useSelector(state => state.commentReducer);
-	const likeData = useSelector(state => state.likeReducer);
-	const commentData = useSelector(state => state.commentReducer);
 
 	const updateItem = () => {
 		if (textUpdate) {
@@ -27,8 +27,6 @@ const Card = ({ post }) => {
 
 	const deleteQuote = async () => {
 		await dispatch(deletePost(post.id));
-		dispatch(getPosts());
-		dispatch(getLikes());
 	};
 
 	useEffect(() => {
@@ -110,7 +108,7 @@ const Card = ({ post }) => {
 										) {
 											deleteQuote();
 										}
-									}}
+									}} 
 								>
 									<img src="./img/icons/trash.svg" alt="trash" />
 								</div>
@@ -123,16 +121,12 @@ const Card = ({ post }) => {
 									src="./img/icons/message1.svg"
 									alt="comments"
 								/>
-						
-
-
-
 
 								<span>{post.comments}</span>
 							</div>
 							<div>
 								<LikeButton
-									key={!isEmpty(likeData[0] && likeData.map(likeDb => likeDb.id))} post={post} 
+									post={post}
 									postUsersLike={
 										!isEmpty(post.Users[0]) &&
 										post.Users.map(likersId => {
@@ -144,13 +138,15 @@ const Card = ({ post }) => {
 							</div>
 							<img src="./img/icons/share.svg" alt="share" />
 						</div>
-						
-						{showComments &&<CardComments post={post}/>}
+
+						{showComments && <CardComments post={post} />}
 					</div>
 				</>
 			)}
 		</li>
 	);
 };
+/* ******************** Card end ******************** */
 
+// export
 export default Card;

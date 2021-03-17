@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
+// ******************** components/Post/CardComments ******************** //
+
+// imports
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	addComment,
-	deleteComment,
-	getComments,
-} from '../../actions/comment.actions';
+import { addComment, getComments } from '../../actions/comment.actions';
+import { getPosts } from '../../actions/post.actions';
 import { isEmpty, timestamParser } from '../Utils';
 import EditDeleteComment from './EditDeleteComment';
 
+/* ******************** CardComments ******************** */
 const CardComments = ({ post }) => {
 	const [content, setText] = useState('');
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
-	//const uid = useContext(UidContext);
 	const commentData = useSelector(state => state.commentReducer);
 	const dispatch = useDispatch();
 
@@ -22,6 +22,7 @@ const CardComments = ({ post }) => {
 		if (content) {
 			await dispatch(addComment(post, userData, content));
 			dispatch(getComments());
+			dispatch(getPosts());
 			setText('');
 		} else {
 			alert('Veuillez entrer un message');
@@ -40,7 +41,7 @@ const CardComments = ({ post }) => {
 										? 'comment-container client'
 										: 'comment-container'
 								}
-								key={post.id}
+								key={comment.id}
 							>
 								<div className="letf-part">
 									<img
@@ -68,12 +69,12 @@ const CardComments = ({ post }) => {
 
 									<p>{comment.content}</p>
 								</div>
-								<EditDeleteComment
-									comment={comment}
-								/>
+								<span></span>
+								<EditDeleteComment comment={comment} post={post}/>
 							</div>
 						);
 					}
+					return null;
 				})}
 			{userData.id && (
 				<form action="" onSubmit={handleComment} className="comment-form">
@@ -92,5 +93,7 @@ const CardComments = ({ post }) => {
 		</div>
 	);
 };
+/* ******************** CardComments end ******************** */
 
+// export
 export default CardComments;

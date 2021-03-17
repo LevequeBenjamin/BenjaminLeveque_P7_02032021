@@ -20,19 +20,20 @@ exports.signUpErrors = err => {
 };
 // ******************** signUpErrors end ******************** //
 
-module.exports.signInErrors = (err) => {
-  let errors = { email: '', password: ''}
+// ******************** signInErrors ******************** //
+module.exports.signInErrors = err => {
+	let errors = { email: '', password: '' };
 
-  if (err.message.includes("email")) 
-    errors.email = "Email inconnu";
-  
-  if (err.message.includes('password'))
-    errors.password = "Le mot de passe ne correspond pas"
+	if (err.message.includes('email')) errors.email = 'Email inconnu';
 
-  return errors;
-}
+	if (err.message.includes('password'))
+		errors.password = 'Le mot de passe ne correspond pas';
 
+	return errors;
+};
+// ******************** signInErrors end ******************** //
 
+// ******************** uploadErrors ******************** //
 exports.uploadErrors = err => {
 	let errors = { format: '', maxSize: '' };
 
@@ -44,3 +45,4 @@ exports.uploadErrors = err => {
 
 	return errors;
 };
+// ******************** uploadErrors ******************** //

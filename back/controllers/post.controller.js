@@ -1,19 +1,19 @@
+// ******************** post.controller ******************** //
+
 // imports
 const models = require('../models');
 const { uploadErrors } = require('../utils/errors.utils');
-const jwtUtils = require('../utils/jwt.utils');
 const fs = require('fs');
 const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
 
+/* ******************** createPost ******************** */
 exports.createPost = async (req, res) => {
-	//Params
 	let content = req.body.content;
-	//let userId = jwtUtils.getUserId(req.cookies.jwt);
 	let userId = req.body.userId;
 	let filename;
 
-	if (req.file != null ) {
+	if (req.file != null) {
 		try {
 			if (
 				req.file.detectedMimeType !== 'image/jpg' &&
@@ -25,7 +25,7 @@ exports.createPost = async (req, res) => {
 			if (req.file.size > 500000) throw Error('max size');
 		} catch (err) {
 			const errors = uploadErrors(err);
-			return res.status(201).json(errors);
+			return res.status(201).send({errors});
 		}
 
 		filename = userId + Date.now() + '.jpg';
@@ -38,29 +38,22 @@ exports.createPost = async (req, res) => {
 		);
 	}
 
-	if (content == null) {
-		 res.status(200).json({ error: 'paramètres manquants' });
-	}
 	try {
-		const user = await models.User.findOne({
-			where: { id: userId },
-		});
-		if (!user) {
-			 res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
-		const newPost = await models.Post.create({
+		await models.Post.create({
 			content: content,
 			imageUrl: req.file != null ? './uploads/posts/' + filename : '',
 			UserId: userId,
-			video: req.body.video
+			video: req.body.video,
 		})
-			.then(newPost => res.status(200).json({ newPost }))
-			.catch(error => res.status(500).json({ error }));
+			.then(newPost => res.status(201).send({ newPost }))
+			.catch(error => res.status(400).send({ error }));
 	} catch (error) {
-		res.status(500).json({ error });
+		return res.status(500).send({ error });
 	}
 };
+/* ******************** createPost end ******************** */
 
+/* ******************** readPost ******************** */
 exports.readPost = async (req, res) => {
 	try {
 		const posts = await models.Post.findAll({
@@ -72,64 +65,133 @@ exports.readPost = async (req, res) => {
 			],
 		});
 		if (posts) {
-			res.status(200).json(posts);
+			res.status(200).send(posts);
 		} else {
-			res.status(404).json({ error: 'no messages found !' });
+			res.status(404).send({ error: 'aucun message trouvé' });
 		}
-	} catch (err) {
-		console.log(err);
-		res.status(500).json({ error: 'invalid fields !' });
+	} catch (error) {
+		res.status(500).send({ error });
 	}
 };
+/* ******************** readPost end ******************** */
 
+/* ******************** updatePost ******************** */
 exports.updatePost = async (req, res) => {
-	//Params
 	let content = req.body.content;
 
-	if (content == null) {
-		return res.status(400).json({ error: 'paramètres manquants' });
-	}
 	try {
 		const post = await models.Post.findOne({
 			where: { id: req.params.id },
 		});
-		if (!post) {
-			return res.status(401).json({ error: 'Post non trouvé !' });
-		}
-		//(post.content = content),
-		//await post
-		//	.save({
-		//fields: ['content'],
-		//})
+
 		await post
 			.update({
 				content: content,
 			})
-			.then(post => res.status(200).json({ post }))
-			.catch(error => res.status(500).json({ error }));
+			.then(post => res.status(200).send({ post }))
+			.catch(error => res.status(400).send({ error }));
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
+/* ******************** updatePost end ******************** */
 
+/* ******************** deletePost ******************** */
 exports.deletePost = async (req, res) => {
 	try {
-		const post = await models.Post.findOne({
-			where: { id: req.params.id },
-		});
-		if (!post) {
-			return res.status(401).json({ error: 'Post non trouvé !' });
-		}
 		await models.Post.destroy({
 			where: { id: req.params.id },
 		})
-			.then(post =>
+			.then(
 				res
 					.status(200)
-					.json({ message: 'post ' + req.params.id + ' supprimé !' }),
+					.send({ message: 'post ' + req.params.id + ' supprimé !' }),
 			)
-			.catch(error => res.status(500).json({ error }));
+			.catch(error => res.status(400).send({ error }));
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
+/* ******************** deletePost end ******************** */
+
+// exports.createPost = async (req, res) => {
+// 	let content = req.body.content;
+// 	let userId = req.body.userId;
+// 	let filename;
+
+// 	if (req.file != null) {
+// 		try {
+// 			if (
+// 				req.file.detectedMimeType !== 'image/jpg' &&
+// 				req.file.detectedMimeType !== 'image/png' &&
+// 				req.file.detectedMimeType !== 'image/jpeg'
+// 			)
+// 				throw Error('invalid file');
+
+// 			if (req.file.size > 500000) throw Error('max size');
+
+// 			filename = userId + Date.now() + '.jpg';
+
+// 			await pipeline(
+// 				req.file.stream,
+// 				fs.createWriteStream(
+// 					`${__dirname}/../client/public/uploads/posts/${filename}`,
+// 				),
+// 			);
+
+// 			await models.Post.create({
+// 				content: content,
+// 				imageUrl: req.file != null ? './uploads/posts/' + filename : '',
+// 				UserId: userId,
+// 				video: req.body.video,
+// 			})
+// 				.then(newPost => res.status(201).send({ newPost }))
+// 				.catch(error => res.status(400).send({ error }));
+// 		} catch (err) {
+// 			const errors = uploadErrors(err);
+// 		 res.status(200).send({errors});
+// 		}
+// 	}
+// };
+
+// exports.createPost = async (req, res) => {
+// 	let fileName;
+// 	let content = req.body.content;
+// 	let userId = req.body.userId;
+
+// 	if (req.file !== null) {
+// 		try {
+// 			if (
+// 				req.file.detectedMimeType != 'image/jpg' &&
+// 				req.file.detectedMimeType != 'image/png' &&
+// 				req.file.detectedMimeType != 'image/jpeg'
+// 			)
+// 				throw Error('invalid file');
+
+// 			if (req.file.size > 500000) throw Error('max size');
+// 		} catch (err) {
+// 			const errors = uploadErrors(err);
+// 			return res.status(201).json({ errors });
+// 		}
+// 		fileName = userId + Date.now() + '.jpg';
+
+// 		await pipeline(
+// 			req.file.stream,
+// 			fs.createWriteStream(
+// 				`${__dirname}/../client/public/uploads/posts/${fileName}`,
+// 			),
+// 		);
+// 	}
+
+// 	try {
+// 		await models.Post.create({
+// 			content: content,
+// 			imageUrl: req.file != null ? './uploads/posts/' + filename : '',
+// 			UserId: userId,
+// 			video: req.body.video,
+// 		});
+// 		return newPost => res.status(201).json(newPost);
+// 	} catch (err) {
+// 		return res.status(400).send(err);
+// 	}
+// };

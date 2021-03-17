@@ -1,8 +1,12 @@
+// ******************** components/Log/index ******************** //
+
+// import
 import React, { useState } from 'react';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 
-const Log = ( props ) => {
+/* ******************** Log ******************** */
+const Log = props => {
 	const [signUpModal, setSignUpModal] = useState(props.signup);
 	const [signInModal, setSignInModal] = useState(props.signin);
 
@@ -19,10 +23,18 @@ const Log = ( props ) => {
 		<div className="connection-form">
 			<div className="form-container">
 				<ul>
-					<li onClick={handleModals} id="register" className={signUpModal ? "active-btn" : null}>
+					<li
+						onClick={handleModals}
+						id="register"
+						className={signUpModal ? 'active-btn' : null}
+					>
 						S'inscrire
 					</li>
-					<li onClick={handleModals} id="login" className={signInModal ? "active-btn" : null}>
+					<li
+						onClick={handleModals}
+						id="login"
+						className={signInModal ? 'active-btn' : null}
+					>
 						Se connecter
 					</li>
 				</ul>
@@ -32,5 +44,7 @@ const Log = ( props ) => {
 		</div>
 	);
 };
+/* ******************** Log end ******************** */
 
+// export
 export default Log;

@@ -1,7 +1,12 @@
+// ******************** users.actions ******************** //
+
+// imports
 import axios from 'axios';
 
+// const
 export const GET_USERS = 'GET_USERS';
 
+/* ******************** getUsers ******************** */
 export const getUsers = () => {
 	return dispatch => {
 		return axios
@@ -12,3 +17,4 @@ export const getUsers = () => {
 			.catch(err => console.log(err));
 	};
 };
+/* ******************** getUsers end ******************** */

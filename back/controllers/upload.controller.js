@@ -21,7 +21,7 @@ exports.uploadProfil = async (req, res, next) => {
 		if (req.file.size > 500000) throw Error('max size');
 	} catch (err) {
 		const errors = uploadErrors(err);
-		return res.status(201).json(errors);
+		return res.status(201).send({errors});
 	}
 
 	const filename = req.body.name + '.jpg';
@@ -38,17 +38,14 @@ exports.uploadProfil = async (req, res, next) => {
 			attributes: ['pictureUrl', 'id'],
 			where: { id: req.body.userId },
 		});
-		if (!user) {
-			return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-		}
-		console.log(user);
 		await user
 			.update({
 				pictureUrl: './uploads/profil/' + filename,
 			})
-			.then(res.status(201).json({ message: 'photo ajouté !' }))
-			.catch(err => res.status(500).json(err));
+			.then(res.status(201).send({ message: 'photo ajouté !' }))
+			.catch(error => res.status(400).send(error));
 	} catch (error) {
-		res.status(500).json({ error });
+		res.status(500).send({ error });
 	}
 };
+/* ******************** uploadProfil end ******************** */

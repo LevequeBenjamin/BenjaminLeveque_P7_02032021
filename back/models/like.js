@@ -24,13 +24,13 @@ module.exports = (sequelize, DataTypes) => {
 			models.Like.belongsTo(models.User, {
 				foreignKey: 'userId',
 				as: 'user',
-				onDelete: 'cascade'
+				onDelete: 'cascade',
 			});
 
 			models.Like.belongsTo(models.Post, {
 				foreignKey: 'postId',
 				as: 'post',
-				onDelete: 'cascade'
+				onDelete: 'cascade',
 			});
 		}
 	}

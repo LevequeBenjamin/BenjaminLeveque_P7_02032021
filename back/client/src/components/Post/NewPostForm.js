@@ -1,9 +1,13 @@
+// ******************** components/Post/NewPostForm ******************** //
+
+// imports
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { addPost, getPosts, GET_POSTS } from '../../actions/post.actions';
+import { addPost, getPosts } from '../../actions/post.actions';
 import { timestamParser, isEmpty } from '../Utils';
 
+/* ******************** NewPostForm ******************** */
 const NewPostForm = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [content, setContent] = useState('');
@@ -11,6 +15,7 @@ const NewPostForm = () => {
 	const [video, setVideo] = useState('');
 	const [file, setFile] = useState();
 	const userData = useSelector(state => state.userReducer);
+	const error = useSelector(state => state.errorReducer.postErrors);
 	const dispatch = useDispatch();
 
 	const handlePicture = e => {
@@ -26,16 +31,14 @@ const NewPostForm = () => {
 			data.append('content', content);
 			if (file) data.append('file', file);
 			data.append('video', video);
-			//console.log(data)
 
-      await dispatch(addPost(data));
-      dispatch(getPosts());
-      cancelPost();
+			await dispatch(addPost(data));
+			dispatch(getPosts());
+			cancelPost();
 		} else {
 			alert('Veuillez entrer un message');
 		}
 	};
-
 
 	const cancelPost = () => {
 		setContent('');
@@ -44,24 +47,25 @@ const NewPostForm = () => {
 		setFile('');
 	};
 
-	const handleVideo = () => {
-		let findLink = content.split(' ');
-		for (let i = 0; i < findLink.length; i++) {
-			if (
-				findLink[i].includes('https://www.yout') ||
-				findLink[i].includes('https://yout')
-			) {
-				let embed = findLink[i].replace('watch?v=', 'embed/');
-				setVideo(embed.split('&')[0]);
-				findLink.splice(i, 1);
-				setContent(findLink.join(' '));
-				setImageUrl('');
-			}
-		}
-	};
-
 	useEffect(() => {
 		if (!isEmpty(userData)) setIsLoading(false);
+
+		const handleVideo = () => {
+			let findLink = content.split(' ');
+			for (let i = 0; i < findLink.length; i++) {
+				if (
+					findLink[i].includes('https://www.yout') ||
+					findLink[i].includes('https://yout')
+				) {
+					let embed = findLink[i].replace('watch?v=', 'embed/');
+					setVideo(embed.split('&')[0]);
+					findLink.splice(i, 1);
+					setContent(findLink.join(' '));
+					setImageUrl('');
+				}
+			}
+		};
+
 		handleVideo();
 	}, [userData, content, video]);
 
@@ -130,6 +134,8 @@ const NewPostForm = () => {
 									<button onClick={() => setVideo('')}>Supprimer vidéo</button>
 								)}
 							</div>
+							{!isEmpty(error.format) && <p>{error.format}</p>}
+							{!isEmpty(error.maxSize) && <p>{error.maxSize}</p>}
 							<div className="btn-send">
 								{content || imageUrl || video.length > 20 ? (
 									<button className="cancel" onClick={cancelPost}>
@@ -147,5 +153,7 @@ const NewPostForm = () => {
 		</div>
 	);
 };
+/* ******************** NewPostForm end ******************** */
 
+// export
 export default NewPostForm;

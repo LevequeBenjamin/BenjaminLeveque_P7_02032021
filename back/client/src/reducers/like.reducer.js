@@ -1,16 +1,26 @@
-import { GET_LIKES, LIKE_POST, UNLIKE_POST} from '../actions/like.actions';
+// ******************** comment.actions ******************** //
 
-const initialState = {}; 
+// imports
+import { GET_LIKES, UNLIKE_POST } from '../actions/like.actions';
 
+// const
+const initialState = {};
+
+/* ******************** likeReducer ******************** */
 export default function likeReducer(state = initialState, action) {
 	switch (action.type) {
 		case GET_LIKES:
 			return action.payload;
-	 case LIKE_POST:
-		return action.payload
+
 		case UNLIKE_POST:
-			 	return action.payload
+			return state.filter(
+				like =>
+					like.userId !== action.payload.uid &&
+					like.postId !== action.payload.postId,
+			);
+
 		default:
 			return state;
 	}
 }
+/* ******************** likeReducer end ******************** */
