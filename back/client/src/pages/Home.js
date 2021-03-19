@@ -8,6 +8,7 @@ import NewPostForm from '../components/Post/NewPostForm';
 import Thread from '../components/Thread';
 import Log from '../components/Log';
 import Trends from '../components/Trends';
+import Contact from '../components/Profil/Contact';
 
 /* ******************** Home ******************** */
 const Home = () => {
@@ -25,7 +26,8 @@ const Home = () => {
 			<div className='right-side'>
 				<div className='right-side-container'>
 					<div className='wrapper'>
-						<Trends />
+						 <Trends /> 
+						{uid && <Contact/>}
 					</div>
 				</div>
 			</div>

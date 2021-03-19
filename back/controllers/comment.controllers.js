@@ -90,7 +90,7 @@ exports.readCommentPost = async (req, res) => {
 			],
 		});
 		if (comments > []) {
-			res.status(200).send(comments);
+			 res.status(200).send(comments);
 		} else {
 			return res.status(400).send({ error: "il n'y a pas de commentaires" });
 		}

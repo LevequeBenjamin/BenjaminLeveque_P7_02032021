@@ -1,0 +1,18 @@
+.showTrend {
+  position: absolute;
+  padding: 0;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  left: -180%;
+  bottom: 0;
+  //height: calc(100vh - 200px);;
+  width: 200%;
+  transform-origin: center;
+    .card-container {
+      background-color: $white;
+      overflow-y: scroll;
+      height: 100% !important;
+    }
+}

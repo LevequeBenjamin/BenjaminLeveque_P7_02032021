@@ -5,6 +5,7 @@ import axios from 'axios';
 
 // const
 export const GET_POSTS = 'GET_POSTS';
+export const GET_ONE_POST = 'GET_ONE_POST';
 export const GET_ALL_POSTS = 'GET_ALL_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
@@ -27,6 +28,19 @@ export const getPosts = num => {
 	};
 };
 /* ******************** getPosts end ******************** */
+
+/* ******************** getOnePost ******************** */
+export const getOnePost = (postId) => {
+	return dispatch => {
+		return axios
+			.get(`${process.env.REACT_APP_API_URL}api/post/read-one-post/${postId}`)
+			.then(res => {
+				dispatch({ type: GET_ONE_POST, payload: res.data });
+			})
+			.catch(err => console.log(err));
+	};
+};
+/* ******************** getOnePost end ******************** */
 
 /* ******************** addPost ******************** */
 export const addPost = data => {
@@ -76,3 +90,5 @@ export const deletePost = postId => {
 	};
 };
 /* ******************** deletePost end ******************** */
+
+

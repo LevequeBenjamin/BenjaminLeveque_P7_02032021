@@ -75,6 +75,30 @@ exports.readPost = async (req, res) => {
 };
 /* ******************** readPost end ******************** */
 
+/* ******************** readOnePost ******************** */
+exports.readOnePost = async (req, res) => {
+	let postId = req.params.id
+	try {
+		const post = await models.Post.findOne({
+			include: [
+				{
+					model: models.User,
+					attributes: ['username'],
+				},
+			],
+			where: {id: postId}
+		});
+		if (post) {
+			res.status(200).send(post);
+		} else {
+			res.status(404).send({ error: 'aucun message trouvé' });
+		}
+	} catch (error) {
+		res.status(500).send({ error });
+	}
+};
+/* ******************** readOnePost end ******************** */
+
 /* ******************** updatePost ******************** */
 exports.updatePost = async (req, res) => {
 	let content = req.body.content;

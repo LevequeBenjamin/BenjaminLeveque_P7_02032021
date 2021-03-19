@@ -34,7 +34,7 @@ const Card = ({ post }) => {
 	}, [usersData]);
 
 	return (
-		<li className="card-container" key={post.id}>
+		<li className="card-container">
 			{isLoading ? (
 				<i className="fas fa-spinner fa-spin"></i>
 			) : (

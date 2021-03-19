@@ -13,6 +13,7 @@ import { getPosts } from '../../actions/post.actions';
 /* ******************** LikeButton ******************** */
 const LikeButton = ({ post, postUsersLike }) => {
 	const [liked, setLiked] = useState(false);
+	//const [isLoading, setIsloading] = useState(true);
 	const uid = useContext(UidContext);
 	const dispatch = useDispatch();
 	const likeData = useSelector(state => state.likeReducer);
@@ -32,14 +33,15 @@ const LikeButton = ({ post, postUsersLike }) => {
 
 		getLikesPosts();
 		setLiked(true);
+		//setIsloading(false)
 	};
+
 
 	const unlike = async () => {
 		await dispatch(unlikePost(post, uid, likeId));
 
-		//getLikesPosts();
-
 		setLiked(false);
+		//setIsloading(false)
 	};
 
 	useEffect(() => {

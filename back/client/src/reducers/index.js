@@ -9,6 +9,8 @@ import allPostsReducer from './allPosts.reducer';
 import commentReducer from './comment.reducer';
 import likeReducer from './like.reducer';
 import errorReducer from './error.reducer';
+import trendingReducer from './trending.reducer';
+import onePostReducer from './onePost.reducer';
 
 /* ******************** combineReducers ******************** */
 export default combineReducers({
@@ -18,6 +20,8 @@ export default combineReducers({
 	allPostsReducer,
 	commentReducer,
 	likeReducer,
-	errorReducer
+	errorReducer,
+	trendingReducer,
+	onePostReducer
 });
 /* ******************** combineReducers ******************** */
