@@ -37,7 +37,7 @@ const CardComments = ({ post }) => {
 						return (
 							<div
 								className={
-									comment.userId === userData.id
+									comment.userId === userData.id 
 										? 'comment-container client'
 										: 'comment-container'
 								}

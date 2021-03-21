@@ -3,16 +3,23 @@
   max-width: 1200px;
   grid-template-columns: 60px 1fr 374px;
   overflow: hidden;
-  margin: 58px auto 50px;
+  margin: 45px auto 50px;
   position: relative;
+  @media screen and(max-width: 990px) {
+    grid-template-columns: 60px 1fr 120px;
+  }
+  @media screen and(max-width: 550px) {
+    grid-template-columns: 45px 1fr;
+  }
   .main {
     .home-header {
       margin: 0 auto 12px;
       text-align: center;
+      border-bottom: 1px solid $grey;
       
       .connection-form {
-        background: $color-4;
-        border-radius: 20px;
+        //background: $color-4;
+        //border-radius: 20px;
         padding: 20px;
 
         ul {
@@ -26,12 +33,13 @@
             padding: 12px 14px;
             transition: .2s;
             margin: 0 8px;
+            color: $white;
           }
           .active-btn {
-            background: $color-1;
+            background: $color-dark-2;
   
             &:hover {
-              background: $color-2;
+              background: $color-3;
             }
           }
           li:not(.active-btn) {
@@ -42,6 +50,8 @@
         }
         form {
           input {
+            background-color: $color-dark-3;
+            color: $white;
             padding: 10px 14px;
             margin: 0;
             font-size: 1.2rem;
@@ -55,6 +65,10 @@
           input[type=submit] {
             padding: 14px 14px;
             border-radius: 20px;
+            background-color: $color-dark-2;
+            &:hover{
+              background-color: $color-3;
+            }
           }
         }
       }
@@ -64,10 +78,16 @@
     //position: relative;
     width: 100%;
     margin: 0px 0 0 14px;
-
+      
     @media screen and(max-width: 990px) {
+      margin: 0;
+      .trending-container{
       display: none;
-    }
+      }
+  }
+  @media screen and(max-width: 550px) {
+    display: none;
+  }
   
     .right-side-container {
       position: fixed;

@@ -11,7 +11,9 @@
   width: 200%;
   transform-origin: center;
     .card-container {
-      background-color: $white;
+      background-color: $color-dark-4;
+      border-radius: 20px;
+      
       overflow-y: scroll;
       height: 100% !important;
     }

@@ -94,11 +94,28 @@ const Card = ({ post }) => {
 								title={post.id}
 							></iframe>
 						)}
-						{userData.id === post.UserId && (
+						{ userData.id === post.UserId && (
 							<div className="button-container">
 								<div onClick={() => setIsUpdated(!isUpdated)}>
 									<img src="./img/icons/edit.svg" alt="edit" />
 								</div>
+								<div
+									onClick={() => {
+										if (
+											window.confirm(
+												'Voulez-vous vraiment supprimer ce message ?',
+											)
+										) {
+											deleteQuote();
+										}
+									}} 
+								>
+									<img src="./img/icons/trash.svg" alt="trash" />
+								</div>
+							</div>
+						)}
+						{ userData.isAdmin === true && (
+							<div className="button-container">
 								<div
 									onClick={() => {
 										if (

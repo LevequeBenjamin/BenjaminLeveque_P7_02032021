@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { UidContext } from '../AppContext';
 import { isEmpty } from '../Utils';
 
 const Contact = () => {
@@ -7,6 +8,7 @@ const Contact = () => {
 	const [playOnce, setPlayOnce] = useState(true);
 	const [contact, setContact] = useState([]);
 	const usersData = useSelector(state => state.usersReducer);
+	const uid = useContext(UidContext);
 
 	useEffect(() => {
 		const contact = () => {
@@ -47,6 +49,7 @@ const Contact = () => {
 				<ul>
 					{contact &&
 						contact.map(user => {
+							if(user.id !== uid){
 							return (
 								<li className="user-hint" key={user.id}>
 									<img src={user.pictureUrl} alt="user-pic" />
@@ -54,7 +57,7 @@ const Contact = () => {
                   
 								</li>
 							);
-						})}
+	}	})}
 				</ul>
 			)}
 		</div>

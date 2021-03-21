@@ -57,12 +57,14 @@ exports.createPost = async (req, res) => {
 exports.readPost = async (req, res) => {
 	try {
 		const posts = await models.Post.findAll({
+			order:[['createdAt', 'DESC']],
 			include: [
 				{
 					model: models.User,
 					attributes: ['username'],
 				},
 			],
+			
 		});
 		if (posts) {
 			res.status(200).send(posts);

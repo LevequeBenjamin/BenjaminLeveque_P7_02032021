@@ -1,32 +1,8 @@
 .post-container {
   margin: 0 auto 0;
   padding: 16px 40px;
-  border-radius: 20px;
+  border-bottom: 2px solid $grey;
   position: relative;
-  background: $color-4;
-
-  i {
-    font-size: 1.5rem;
-    margin: 20px 0;
-    color: $color-3;
-  }
-
-  .data {
-    position: absolute;
-    right: 42px;
-    text-align: right;
-
-    @media screen and(max-width: 420px) {
-      right: 10px;
-    }
-    @media screen and(max-width: 380px) {
-      display: none;
-    }
-
-    span {
-      font-weight: bold;
-    }
-  }
 
   .user-info {
     margin-bottom: 10px;
@@ -34,11 +10,10 @@
       border-radius: 20px;
       height: 60px;
       width: 60px;
-      box-shadow: 2px 2px 2px rgba(51, 51, 51, 0.16);
       object-fit: cover;
     }
     h3 {
-      color: $black;
+      color: $white;
     }
   }
   .post-form {
@@ -50,12 +25,11 @@
       width: 100%;
       font-size: 1.4rem;
       padding: 12px 15px;
-      border-radius: 20px 20px 6px 20px;
+      //border-radius: 20px 20px 6px 20px;
     }
     .card-container {
-      background: $white;
-      border-radius: 20px 20px 6px 20px;
-
+      border: 1px solid $grey;
+      border-radius: 20px;
       .card-left {
         text-align: left;
         img {
@@ -118,7 +92,7 @@
       margin: 0 auto;
       width: 100%;
 
-      .icon {
+      .icons {
         position: relative;
         cursor: pointer;
         width: 30px;
@@ -129,17 +103,6 @@
           height: 24px;
           width: 24px;
           transform: translate(-18px, -1px);
-        }
-
-        button {
-          width: 190px;
-          padding: 10px 20px;
-          background: $white;
-          transition: 0.2s;
-
-          &:hover {
-            background: $color-3;
-          }
         }
 
         input {
@@ -164,11 +127,10 @@
         .cancel {
           border-radius: 20px;
           margin-right: 8px;
-          background: $white;
+          background: $color-dark-2;
 
           &:hover {
-            color: $color-4;
-            background: $color-3;
+            background: $color-dark-3;
           }
         }
         .send {
