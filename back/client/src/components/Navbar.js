@@ -1,4 +1,4 @@
-// ******************** components/Navbar ******************** //
+// ******************** components/Navbar.js ******************** //
 
 // imports
 import React, { useContext } from 'react';
@@ -9,7 +9,9 @@ import Logout from './Log/Logout';
 
 /* ******************** Navbar ******************** */
 const Navbar = () => {
+	// id de l'utilisateur connecté
 	const uid = useContext(UidContext);
+	// store
 	const userData = useSelector(state => state.userReducer);
 
 	return (
@@ -47,7 +49,7 @@ const Navbar = () => {
 		</nav>
 	);
 };
-/* ******************** Navbar ******************** */
+/* ******************** Navbar end ******************** */
 
 // export
 export default Navbar;

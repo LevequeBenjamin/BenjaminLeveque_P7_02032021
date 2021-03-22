@@ -2,23 +2,66 @@
 
 // imports
 import React, { useState } from 'react';
-import LeftNav from '../LeftNav';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImg from './UploadImg';
-import { updateBio } from '../../actions/user.actions';
+import { getUser, updateBio } from '../../actions/user.actions';
 import { dateParser } from '../Utils';
+import axios from 'axios';
+import cookie from 'js-cookie';
+import { getPosts } from '../../actions/post.actions';
 
 /* ******************** UpdateProfil ******************** */
 const UpdateProfil = () => {
+	// useState
 	const [bio, setBio] = useState('');
 	const [updateForm, setUpdateForm] = useState(false);
+	const [deleteForm, setDeleteForm] = useState(false);
+	const [password, setPassword] = useState('');
+	// store
 	const userData = useSelector(state => state.userReducer);
-	const error = useSelector((state) => state.errorReducer.userErrors);
+	const error = useSelector(state => state.errorReducer.userErrors);
+	// dispatch
 	const dispatch = useDispatch();
 
+	// fonction qui permet de modifier la bio
 	const handleUpdate = () => {
+		// on dispatch updateBio, on passe l'id de l'utilisateur et la nouvelle bio
 		dispatch(updateBio(userData.id, bio));
 		setUpdateForm(false);
+	};
+
+	// fonction qui permet de supprimer le compte de l'utilisateur
+	const handleDelete = e => {
+		const passwordError = document.querySelector('.password.error');
+
+		// fonction qui permet de supprimer le cookie
+		const removeCookie = key => {
+			if (window !== 'undefined') {
+				cookie.remove(key, { expires: 1 });
+			}
+		};
+
+		// methode delete, on passe l'id de l'utilisateur en params et le password en data
+		axios({
+			method: 'delete',
+			url: `${process.env.REACT_APP_API_URL}api/user/${userData.id}`,
+			data: { password },
+		})
+			.then(async function (res) {
+				// on attrape l'erreur en réponse
+				if (res.data.errorPassword) {
+					passwordError.innerHTML = res.data.errorPassword;
+				} else {
+					// on supprime le cookie
+					await removeCookie('jwt');
+					// on met à jour le store
+					dispatch(getUser());
+					dispatch(getPosts());
+					// on actualise la page
+					window.location = '/';
+				}
+			})
+			.catch(err => console.log(err));
 	};
 
 	return (
@@ -55,6 +98,39 @@ const UpdateProfil = () => {
 						)}
 					</div>
 					<h4>Membre depuis le : {dateParser(userData.createdAt)}</h4>
+					{deleteForm === false && (
+						<>
+							<button onClick={() => setDeleteForm(!deleteForm)}>
+								Supprimer le compte
+							</button>
+						</>
+					)}
+					{deleteForm && (
+						<>
+							<p>Confirmer votre mot de passe</p>
+							<div className="password error"></div>
+							<input
+								type="password"
+								name="password"
+								id="password"
+								onChange={e => setPassword(e.target.value)}
+								value={password}
+							/>
+							<button
+								onClick={() => {
+									if (
+										window.confirm(
+											'Voulez-vous vraiment supprimer votre compte ?',
+										)
+									) {
+										handleDelete();
+									}
+								}}
+							>
+								Valider la suppression
+							</button>
+						</>
+					)}
 				</div>
 			</div>
 		</div>

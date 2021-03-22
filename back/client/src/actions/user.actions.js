@@ -7,6 +7,7 @@ import axios from 'axios';
 export const GET_USER = 'GET_USER';
 export const UPLOAD_PICTURE = 'UPLOAD_PICTURE';
 export const UPDATE_BIO = 'UPDATE_BIO';
+export const DELETE_USER = 'DELETE_USER'
 
 // errors
 export const GET_USER_ERRORS = 'GET_USER_ERRORS';
@@ -61,3 +62,24 @@ export const updateBio = (id, bio) => {
 	};
 };
 /* ******************** updateBio end ******************** */
+
+// /* ******************** deleteUser ******************** */
+// export const deleteUser = (id, password) => {
+// 	return dispatch => {
+// 		return axios({
+// 			method: 'delete',
+// 			url: `${process.env.REACT_APP_API_URL}api/user/${id}`,
+// 			data: {password},
+// 		})
+// 		.then(res => {
+// 			console.log(res.data.errorPassword);
+// 			if (res.data.errorPassword) {
+// 				emailPassword.innerHTML = res.data.errorEmail;
+// 			} else {
+// 				dispatch({ type: GET_USER_ERRORS, payload: '' });
+// 			}
+// 		})
+// 			.catch(err => console.log(err));
+// 	};
+// };
+// /* ******************** deleteUser end ******************** */

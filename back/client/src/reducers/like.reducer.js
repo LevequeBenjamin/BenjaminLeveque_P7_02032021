@@ -1,4 +1,4 @@
-// ******************** comment.actions ******************** //
+// ******************** reducers/comment.actions.js ******************** //
 
 // imports
 import { GET_LIKES, UNLIKE_POST } from '../actions/like.actions';

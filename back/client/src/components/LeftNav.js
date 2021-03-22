@@ -1,4 +1,4 @@
-// ******************** components/LeftNav ******************** //
+// ******************** components/LeftNav.js ******************** //
 
 // imports
 import React from 'react';

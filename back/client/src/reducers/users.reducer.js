@@ -1,4 +1,4 @@
-// ******************** users.reducer ******************** //
+// ******************** reducers/users.reducer.js ******************** //
 
 // imports
 import { GET_USERS } from '../actions/users.actions';

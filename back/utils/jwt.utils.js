@@ -1,4 +1,4 @@
-/* ******************** jwt.utils ******************** */
+/* ******************** utils/jwt.utils.js ******************** */
 
 // imports
 const jwt = require('jsonwebtoken');

@@ -1,4 +1,4 @@
-// ******************** auth.controller ******************** //
+// ******************** controllers/auth.controller.js ******************** //
 
 // imports
 const models = require('../models');
@@ -54,7 +54,7 @@ exports.signUp = async (req, res) => {
 				res.status(201).send({ user: user.id });
 			} catch (err) {
 				const errors = signUpErrors(err);
-				res.status(401).send({ errors });
+				res.status(200).send({ errors });
 			}
 		});
 	}

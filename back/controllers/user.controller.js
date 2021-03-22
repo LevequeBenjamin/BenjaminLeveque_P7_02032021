@@ -1,7 +1,8 @@
-// ******************** user.controller ******************** //
+// ******************** controllers/user.controller.js ******************** //
 
 // imports
 const models = require('../models');
+const bcrypt = require('bcrypt');
 
 /* ******************** getUser ******************** */
 // permet de récuperer un utilisateur dans la bd
@@ -82,14 +83,38 @@ exports.updateUser = async (req, res) => {
 /* ******************** deleteUser ******************** */
 // permet de supprimer un utilisateur
 exports.deleteUser = async (req, res) => {
+	const password = req.body.password;
+
 	try {
-		await models.User.destroy({ where: { id: req.params.id } })
-			.then(
-				res
-					.status(200)
-					.send({ message: 'user ' + req.params.id + ' supprimé !' }),
-			)
-			.catch(error => res.status(400).send({ error }));
+		// on contrôle si l'email existe dans la bd
+		const user = await models.User.findOne({ where: { id: req.params.id } });
+		if (!user) {
+			res.status(200).send({ errorEmail: 'id inconnu' });
+		}
+		await bcrypt
+			// on compare le password
+			.compare(password, user.password)
+			.then(valid => {
+				if (!valid) {
+					res
+						.status(200)
+						.json({ errorPassword: 'Le mot de passe ne correspond pas' });
+				} else {
+					try {
+						user
+							.destroy()
+							.then(
+								res
+									.status(200)
+									.send({ message: 'user ' + req.params.id + ' supprimé !' }),
+							)
+							.catch(error => res.status(400).send({ error }));
+					} catch (err) {
+						res.status(500).send({ err });
+					}
+				}
+			})
+			.catch(error => res.status(500).send({ error }));
 	} catch (error) {
 		res.status(500).send({ error });
 	}

@@ -1,7 +1,12 @@
+// ******************** reducers/trending.reducer.js ******************** //
+
+// import
 import { GET_TRENDS } from '../actions/trend.actions';
 
+// const
 const initialState = {};
 
+/* ******************** trendingReducer ******************** */
 export default function trendingReducer(state = initialState, action) {
 	switch (action.type) {
 		case GET_TRENDS:
@@ -10,3 +15,4 @@ export default function trendingReducer(state = initialState, action) {
 			return state;
 	}
 }
+/* ******************** trendingReducer end ******************** */

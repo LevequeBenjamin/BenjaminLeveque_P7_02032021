@@ -1,24 +1,32 @@
-// ******************** components/Profil/UploadImg ******************** //
+// ******************** components/Profil/UploadImg.js ******************** //
 
 // imports
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadPicture } from '../../actions/user.actions';
+import { getUser, uploadPicture } from '../../actions/user.actions';
 
 /* ******************** UploadImg ******************** */
 const UploadImg = () => {
+	// useState
 	const [file, setFile] = useState();
+	// dispatch
 	const dispatch = useDispatch();
+	// store
 	const userData = useSelector(state => state.userReducer);
 
-	const handlePicture = e => {
+	// fonction qui permet de modifier la photo de profil
+	const handlePicture = async e => {
 		e.preventDefault();
+		// on crée un objet data
 		const data = new FormData();
 		data.append('name', userData.username);
 		data.append('userId', userData.id);
 		data.append('file', file);
 
-		dispatch(uploadPicture(data, userData.id));
+		// on dispatch uploadPicture, on passe l'objet et l'id de l'utilisateur
+		await dispatch(uploadPicture(data, userData.id));
+		// on met à jour le store
+		dispatch(getUser());
 	};
 
 	return (

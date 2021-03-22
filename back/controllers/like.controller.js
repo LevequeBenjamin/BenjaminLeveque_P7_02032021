@@ -1,4 +1,4 @@
-// ******************** like.controller ******************** //
+// ******************** controllers/like.controller.js ******************** //
 
 // imports
 const models = require('../models');
@@ -30,7 +30,7 @@ exports.deleteLike = async (req, res) => {
 		let userId = req.params.liker;
 		let postId = req.params.id;
 
-		// on supprime le dislike
+		// on supprime le like
 		await models.Like.destroy({
 			where: { userId: userId, postId: postId },
 		})
@@ -43,7 +43,7 @@ exports.deleteLike = async (req, res) => {
 /* ******************** deleteLike end ******************** */
 
 /* ******************** readLikePost ******************** */
-// permet de voir tous les commentaires
+// permet de voir tous les likes
 exports.readLikePost = async (req, res) => {
 	try {
 		const likes = await models.Like.findAll({

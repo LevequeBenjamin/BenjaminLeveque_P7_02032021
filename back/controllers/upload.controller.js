@@ -1,4 +1,4 @@
-// ******************** upload.controller ******************** //
+// ******************** controllers/upload.controller.js ******************** //
 
 // imports
 const models = require('../models');
@@ -21,7 +21,7 @@ exports.uploadProfil = async (req, res, next) => {
 		if (req.file.size > 500000) throw Error('max size');
 	} catch (err) {
 		const errors = uploadErrors(err);
-		return res.status(201).send({errors});
+		return res.status(201).send({ errors });
 	}
 
 	const filename = req.body.name + '.jpg';

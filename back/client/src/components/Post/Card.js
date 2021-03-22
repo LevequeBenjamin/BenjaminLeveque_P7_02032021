@@ -1,4 +1,4 @@
-// ******************** components/Post/Card ******************** //
+// ******************** components/Post/Card.js ******************** //
 
 // imports
 import React, { useEffect, useState } from 'react';
@@ -10,14 +10,18 @@ import LikeButton from './LikeButton';
 
 /* ******************** Card ******************** */
 const Card = ({ post }) => {
+	// useState
 	const [isLoading, setIsLoading] = useState(true);
 	const [isUpdated, setIsUpdated] = useState(false);
 	const [textUpdate, setTextUpdate] = useState(null);
 	const [showComments, setShowComments] = useState(false);
+	// store
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
+	// dispatch
 	const dispatch = useDispatch();
 
+	// fonction qui permet d'actualiser un post
 	const updateItem = () => {
 		if (textUpdate) {
 			dispatch(updatePost(post.id, textUpdate));
@@ -25,10 +29,12 @@ const Card = ({ post }) => {
 		setIsUpdated(false);
 	};
 
+	// fonction qui permet de supprimer un post
 	const deleteQuote = async () => {
 		await dispatch(deletePost(post.id));
 	};
 
+	// useEffect qui passe le loading a false si le store usersData n'est pas vide
 	useEffect(() => {
 		!isEmpty(usersData[0]) && setIsLoading(false);
 	}, [usersData]);
@@ -94,7 +100,7 @@ const Card = ({ post }) => {
 								title={post.id}
 							></iframe>
 						)}
-						{ userData.id === post.UserId && (
+						{userData.id === post.UserId && (
 							<div className="button-container">
 								<div onClick={() => setIsUpdated(!isUpdated)}>
 									<img src="./img/icons/edit.svg" alt="edit" />
@@ -108,13 +114,13 @@ const Card = ({ post }) => {
 										) {
 											deleteQuote();
 										}
-									}} 
+									}}
 								>
 									<img src="./img/icons/trash.svg" alt="trash" />
 								</div>
 							</div>
 						)}
-						{ userData.isAdmin === true && (
+						{userData.isAdmin === true && (
 							<div className="button-container">
 								<div
 									onClick={() => {
@@ -125,7 +131,7 @@ const Card = ({ post }) => {
 										) {
 											deleteQuote();
 										}
-									}} 
+									}}
 								>
 									<img src="./img/icons/trash.svg" alt="trash" />
 								</div>

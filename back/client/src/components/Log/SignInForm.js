@@ -1,4 +1,4 @@
-// ******************** components/Log/SignInForm ******************** //
+// ******************** components/Log/SignInForm.js ******************** //
 
 // imports
 import React, { useState } from 'react';
@@ -9,6 +9,7 @@ const SignInForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
+	// fonction qui permet de se connecter
 	const handleLogin = e => {
 		e.preventDefault();
 		const emailError = document.querySelector('.email.error');
@@ -25,6 +26,7 @@ const SignInForm = () => {
 			},
 		})
 			.then(res => {
+				// on attrape les erreurs et on les affiche
 				if (res.data.errorEmail || res.data.errorPassword) {
 					if (res.data.errorEmail) {
 						emailError.innerHTML = res.data.errorEmail;
@@ -35,6 +37,7 @@ const SignInForm = () => {
 						emailError.innerHTML = '';
 					}
 				} else {
+					// on actualise la page
 					window.location = '/';
 				}
 			})

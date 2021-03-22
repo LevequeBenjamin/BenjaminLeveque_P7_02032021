@@ -1,7 +1,12 @@
-// ******************** comment.actions ******************** //
+// ******************** reducers/user.reducer.js ******************** //
 
 // imports
-import { GET_USER, UPDATE_BIO, UPLOAD_PICTURE } from '../actions/user.actions';
+import {
+	DELETE_USER,
+	GET_USER,
+	UPDATE_BIO,
+	UPLOAD_PICTURE,
+} from '../actions/user.actions';
 
 // const
 const initialState = {};
@@ -21,6 +26,8 @@ export default function userReducer(state = initialState, action) {
 				...state,
 				bio: action.payload,
 			};
+		case DELETE_USER:
+			return state.filter(user => user.id !== action.payload);
 
 		default:
 			return state;

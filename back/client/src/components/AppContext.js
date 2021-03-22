@@ -1,4 +1,4 @@
-// ******************** components/AppContext ******************** //
+// ******************** components/AppContext.js ******************** //
 
 // imports
 import { createContext } from 'react';

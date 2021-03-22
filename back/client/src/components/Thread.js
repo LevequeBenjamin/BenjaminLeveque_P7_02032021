@@ -1,4 +1,4 @@
-// ******************** components/Thread ******************** //
+// ******************** components/Thread.js ******************** //
 
 // imports
 import React, { useEffect, useState } from 'react';
@@ -9,11 +9,15 @@ import { isEmpty } from './Utils';
 
 /* ******************** Thread ******************** */
 const Thread = () => {
+	// useState
 	const [loadPost, setLoadPost] = useState(true);
 	const [count, setCount] = useState(5);
+	// dispatch
 	const dispatch = useDispatch();
+	// store
 	const posts = useSelector(state => state.postReducer);
 
+	// fonction qui permet de load lorsque l'on arrive à la fin du fil d'atualité
 	const loadMore = () => {
 		if (
 			window.innerHeight + document.documentElement.scrollTop + 1 >
@@ -23,6 +27,7 @@ const Thread = () => {
 		}
 	};
 
+	// useEffect, infiny scoll
 	useEffect(() => {
 		if (loadPost) {
 			dispatch(getPosts(count));

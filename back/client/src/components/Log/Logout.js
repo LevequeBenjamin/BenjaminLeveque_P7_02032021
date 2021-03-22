@@ -1,4 +1,4 @@
-// ******************** components/Log/Logout ******************** //
+// ******************** components/Log/Logout.js ******************** //
 
 // imports
 import React from 'react';
@@ -7,20 +7,27 @@ import cookie from 'js-cookie';
 
 /* ******************** Logout ******************** */
 const Logout = () => {
+	// fonction qui supprime le cookie
 	const removeCookie = key => {
 		if (window !== 'undefined') {
+			// on fait expirer le cookie a 1 milliseconde
 			cookie.remove(key, { expires: 1 });
 		}
 	};
+
+	// fonction qui permtet de se déconnecter
 	const logout = async () => {
+		// methode get
 		await axios({
 			method: 'get',
 			url: `${process.env.REACT_APP_API_URL}api/user/logout`,
 			withCredentials: true,
 		})
+			// on supprime le cookie jwt
 			.then(() => removeCookie('jwt'))
 			.catch(err => console.log(err));
 
+		// on actualise la page
 		window.location = '/';
 	};
 

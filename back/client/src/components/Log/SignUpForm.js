@@ -1,4 +1,4 @@
-// ******************** components/Log/SignUpForm ******************** //
+// ******************** components/Log/SignUpForm.js ******************** //
 
 // imports
 import React, { useState } from 'react';
@@ -13,8 +13,10 @@ const SignUpForm = () => {
 	const [password, setPassword] = useState('');
 	const [controlPassword, setControlPassword] = useState('');
 
+	// fonction qui permet de créer un utilisateur
 	const handleRegister = async e => {
 		e.preventDefault();
+		// dom
 		const terms = document.getElementById('terms');
 		const usernameError = document.querySelector('.username.error');
 		const emailError = document.querySelector('.email.error');
@@ -24,12 +26,14 @@ const SignUpForm = () => {
 		);
 		const termsError = document.querySelector('.terms.error');
 
+		// on vide tous les innerHTML
 		passwordConfirmError.innerHTML = '';
 		termsError.innerHTML = '';
 		emailError.innerHTML = '';
 		passwordError.innerHTML = '';
 		usernameError.innerHTML = '';
 
+		// On gère les erreurs, il faut que les deux password correspondent et il faut accepter les conditions générales
 		if (password !== controlPassword || !terms.checked) {
 			if (password !== controlPassword)
 				passwordConfirmError.innerHTML =
@@ -37,6 +41,7 @@ const SignUpForm = () => {
 			if (!terms.checked)
 				termsError.innerHTML = 'Veuillez valider les conditions générales';
 		} else {
+			// methode post, on passe l'email, l'username et le password en data
 			await axios({
 				method: 'post',
 				url: `${process.env.REACT_APP_API_URL}api/user/register`,
@@ -47,6 +52,7 @@ const SignUpForm = () => {
 				},
 			})
 				.then(res => {
+					// on attrape les erreurs en réponse
 					if (
 						res.data.errorEmail ||
 						res.data.errorPassword ||

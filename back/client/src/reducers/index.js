@@ -1,4 +1,4 @@
-// ******************** Index ******************** //
+// ******************** reducers/index.js ******************** //
 
 // imports
 import { combineReducers } from 'redux';
@@ -24,4 +24,4 @@ export default combineReducers({
 	trendingReducer,
 	onePostReducer
 });
-/* ******************** combineReducers ******************** */
+/* ******************** combineReducers end ******************** */

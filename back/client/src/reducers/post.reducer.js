@@ -1,4 +1,4 @@
-// ******************** post.reducer ******************** //
+// ******************** reducers/post.reducer ******************** //
 
 // imports
 import { DELETE_POST, GET_POSTS, UPDATE_POST } from '../actions/post.actions';

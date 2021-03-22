@@ -1,4 +1,4 @@
-/* ******************** post.routes ******************** */
+/* ******************** routes/post.routes.js ******************** */
 
 // imports
 const router = require('express').Router();

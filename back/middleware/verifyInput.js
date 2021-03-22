@@ -1,3 +1,5 @@
+//* ******************** middleware/verifyInput.js ******************** *//
+
 //fichier comprenant les fonctions de vérification des inputs des users
 module.exports = {
 	validEmail: function (value) {

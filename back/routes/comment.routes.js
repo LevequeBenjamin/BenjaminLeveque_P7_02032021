@@ -1,4 +1,4 @@
-/* ******************** comment.routes ******************** */
+/* ******************** routes/comment.routes.js ******************** */
 
 // imports
 const router = require('express').Router();

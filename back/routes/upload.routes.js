@@ -1,4 +1,4 @@
-/* ******************** upload.routes ******************** */
+/* ******************** routes/upload.routes.js ******************** */
 
 // imports
 const router = require('express').Router();

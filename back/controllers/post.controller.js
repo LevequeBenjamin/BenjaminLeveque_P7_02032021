@@ -1,4 +1,4 @@
-// ******************** post.controller ******************** //
+// ******************** controllers/post.controller.js ******************** //
 
 // imports
 const models = require('../models');
@@ -8,6 +8,7 @@ const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
 
 /* ******************** createPost ******************** */
+// permet de créer un post
 exports.createPost = async (req, res) => {
 	let content = req.body.content;
 	let userId = req.body.userId;
@@ -25,7 +26,7 @@ exports.createPost = async (req, res) => {
 			if (req.file.size > 500000) throw Error('max size');
 		} catch (err) {
 			const errors = uploadErrors(err);
-			return res.status(201).send({errors});
+			return res.status(201).send({ errors });
 		}
 
 		filename = userId + Date.now() + '.jpg';
@@ -54,17 +55,17 @@ exports.createPost = async (req, res) => {
 /* ******************** createPost end ******************** */
 
 /* ******************** readPost ******************** */
+// permet de réécupérer tous les posts
 exports.readPost = async (req, res) => {
 	try {
 		const posts = await models.Post.findAll({
-			order:[['createdAt', 'DESC']],
+			order: [['createdAt', 'DESC']],
 			include: [
 				{
 					model: models.User,
 					attributes: ['username'],
 				},
 			],
-			
 		});
 		if (posts) {
 			res.status(200).send(posts);
@@ -78,8 +79,9 @@ exports.readPost = async (req, res) => {
 /* ******************** readPost end ******************** */
 
 /* ******************** readOnePost ******************** */
+// permet de récupérer un seul post
 exports.readOnePost = async (req, res) => {
-	let postId = req.params.id
+	let postId = req.params.id;
 	try {
 		const post = await models.Post.findOne({
 			include: [
@@ -88,7 +90,7 @@ exports.readOnePost = async (req, res) => {
 					attributes: ['username'],
 				},
 			],
-			where: {id: postId}
+			where: { id: postId },
 		});
 		if (post) {
 			res.status(200).send(post);
@@ -102,6 +104,7 @@ exports.readOnePost = async (req, res) => {
 /* ******************** readOnePost end ******************** */
 
 /* ******************** updatePost ******************** */
+// permet de modifier un post
 exports.updatePost = async (req, res) => {
 	let content = req.body.content;
 
@@ -123,6 +126,7 @@ exports.updatePost = async (req, res) => {
 /* ******************** updatePost end ******************** */
 
 /* ******************** deletePost ******************** */
+// permet de supprimer un post
 exports.deletePost = async (req, res) => {
 	try {
 		await models.Post.destroy({
@@ -139,85 +143,3 @@ exports.deletePost = async (req, res) => {
 	}
 };
 /* ******************** deletePost end ******************** */
-
-// exports.createPost = async (req, res) => {
-// 	let content = req.body.content;
-// 	let userId = req.body.userId;
-// 	let filename;
-
-// 	if (req.file != null) {
-// 		try {
-// 			if (
-// 				req.file.detectedMimeType !== 'image/jpg' &&
-// 				req.file.detectedMimeType !== 'image/png' &&
-// 				req.file.detectedMimeType !== 'image/jpeg'
-// 			)
-// 				throw Error('invalid file');
-
-// 			if (req.file.size > 500000) throw Error('max size');
-
-// 			filename = userId + Date.now() + '.jpg';
-
-// 			await pipeline(
-// 				req.file.stream,
-// 				fs.createWriteStream(
-// 					`${__dirname}/../client/public/uploads/posts/${filename}`,
-// 				),
-// 			);
-
-// 			await models.Post.create({
-// 				content: content,
-// 				imageUrl: req.file != null ? './uploads/posts/' + filename : '',
-// 				UserId: userId,
-// 				video: req.body.video,
-// 			})
-// 				.then(newPost => res.status(201).send({ newPost }))
-// 				.catch(error => res.status(400).send({ error }));
-// 		} catch (err) {
-// 			const errors = uploadErrors(err);
-// 		 res.status(200).send({errors});
-// 		}
-// 	}
-// };
-
-// exports.createPost = async (req, res) => {
-// 	let fileName;
-// 	let content = req.body.content;
-// 	let userId = req.body.userId;
-
-// 	if (req.file !== null) {
-// 		try {
-// 			if (
-// 				req.file.detectedMimeType != 'image/jpg' &&
-// 				req.file.detectedMimeType != 'image/png' &&
-// 				req.file.detectedMimeType != 'image/jpeg'
-// 			)
-// 				throw Error('invalid file');
-
-// 			if (req.file.size > 500000) throw Error('max size');
-// 		} catch (err) {
-// 			const errors = uploadErrors(err);
-// 			return res.status(201).json({ errors });
-// 		}
-// 		fileName = userId + Date.now() + '.jpg';
-
-// 		await pipeline(
-// 			req.file.stream,
-// 			fs.createWriteStream(
-// 				`${__dirname}/../client/public/uploads/posts/${fileName}`,
-// 			),
-// 		);
-// 	}
-
-// 	try {
-// 		await models.Post.create({
-// 			content: content,
-// 			imageUrl: req.file != null ? './uploads/posts/' + filename : '',
-// 			UserId: userId,
-// 			video: req.body.video,
-// 		});
-// 		return newPost => res.status(201).json(newPost);
-// 	} catch (err) {
-// 		return res.status(400).send(err);
-// 	}
-// };

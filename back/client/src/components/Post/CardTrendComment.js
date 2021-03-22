@@ -1,32 +1,42 @@
-import React, { useEffect, useState } from 'react';
+// ******************** components/Post/CardTrendComment.js ******************** //
+
+// import
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment, getComments } from '../../actions/comment.actions';
-import { getPosts } from '../../actions/post.actions';
 import { isEmpty, timestamParser } from '../Utils';
 import EditDeleteComment from './EditDeleteComment';
 
-const CardTrendComment = ({post}) => {
-  const [content, setText] = useState('');
+const CardTrendComment = ({ post }) => {
+	// useState
+	const [content, setText] = useState('');
+	// store
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
 	const commentData = useSelector(state => state.commentReducer);
+	// dispatch
 	const dispatch = useDispatch();
 
-  const handleComment = async e => {
+	// fonction qui permet de créer un commentaire
+	const handleComment = async e => {
 		e.preventDefault();
 
+		// on contrôle que l'utilisateur a bien rempli le champs
 		if (content) {
+			// on dispatch addComment, on passe le post, l'utilisateur et le commentaire
 			await dispatch(addComment(post, userData, content));
+			// on dispatch getComments pour récupérer l'id du commentaire
 			dispatch(getComments());
-			dispatch(getPosts());
+			// on vide le champs
 			setText('');
+			// si le champs n'est pas rempli on envoi une alert
 		} else {
 			alert('Veuillez entrer un message');
 		}
 	};
 
-  return (
-    <div className="comments-container">
+	return (
+		<div className="comments-container">
 			{!isEmpty(commentData[0]) &&
 				commentData.map(comment => {
 					if (comment.postId === post.id) {
@@ -66,7 +76,7 @@ const CardTrendComment = ({post}) => {
 									<p>{comment.content}</p>
 								</div>
 								<span></span>
-								<EditDeleteComment comment={comment} post={post}/>
+								<EditDeleteComment comment={comment} post={post} />
 							</div>
 						);
 					}
@@ -87,7 +97,7 @@ const CardTrendComment = ({post}) => {
 				</form>
 			)}
 		</div>
-  );
+	);
 };
 
 export default CardTrendComment;

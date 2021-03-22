@@ -1,4 +1,4 @@
-/* ******************** auth.middleware ******************** */
+/* ******************** middleware/auth.middleware ******************** */
 
 // imports
 const jwt = require('jsonwebtoken');
@@ -12,7 +12,7 @@ exports.checkUser = (req, res, next) => {
 		jwt.verify(token, process.env.JWT_TOKEN, async (err, decodedToken) => {
 			if (err) {
 				res.locals.user = null;
-				//res.cookie('jwt', '', { maxAge: 1 });
+				res.cookie('jwt', '', { maxAge: 1 });
 				next();
 			} else {
 				let user = await models.User.findByPk(decodedToken.userId);
@@ -28,7 +28,7 @@ exports.checkUser = (req, res, next) => {
 };
 //* ******************** checkUser end ******************** *//
 
-//* ******************** requireAuth ******************** *//
+/* ******************** requireAuth ******************** */
 exports.requireAuth = (req, res, next) => {
 	const token = req.cookies.jwt;
 	console.log(token);
@@ -45,4 +45,4 @@ exports.requireAuth = (req, res, next) => {
 		console.log('no token !');
 	}
 };
-//* ******************** requireAuth end ******************** *//
+/* ******************** requireAuth end ******************** */

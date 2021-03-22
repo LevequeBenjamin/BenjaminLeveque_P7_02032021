@@ -201,7 +201,7 @@
 					input[type='file'] {
 						position: absolute;
 						opacity: 1;
-						transform: translate(-20px, -50%);
+						transform: translate(-30px, -50%);
 						cursor: pointer;
 						padding: 10px 20px;
 						color: $white;
@@ -253,7 +253,14 @@
 				h4 {
 					margin: 60px 0 10px;
 				}
+				input[type='password'] {
+					border-radius: 20px;
+					width: 240px;
+					height: 40px;
+					font-size: 1.2rem;
+					margin-bottom: 10px;
 			}
+		}
 		}
 		.popup-profil-container {
 			z-index: 100;
@@ -359,6 +366,16 @@
 					}
 				}
 			}
+		}
+	}
+	.post-container {
+		@media screen and(min-width: 850px) {
+			padding: 30px 100px 30px 100px;
+			
+		}
+		.user-info{
+			display: flex;
+			justify-content: center;
 		}
 	}
 	.contact-container {

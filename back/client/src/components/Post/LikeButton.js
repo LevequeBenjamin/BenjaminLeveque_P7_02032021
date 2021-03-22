@@ -1,4 +1,4 @@
-// ******************** components/Post/LikeButton ******************** //
+// ******************** components/Post/LikeButton.js ******************** //
 
 // imports
 import React, { useContext, useEffect, useState } from 'react';
@@ -12,38 +12,49 @@ import { getPosts } from '../../actions/post.actions';
 
 /* ******************** LikeButton ******************** */
 const LikeButton = ({ post, postUsersLike }) => {
+	// useState
 	const [liked, setLiked] = useState(false);
-	//const [isLoading, setIsloading] = useState(true);
+	// id utilisateur connecté
 	const uid = useContext(UidContext);
+	// dispatch
 	const dispatch = useDispatch();
+	// store
 	const likeData = useSelector(state => state.likeReducer);
+
+	// let
 	let likeId =
 		!isEmpty(likeData[0]) &&
 		likeData.map(likesId => {
 			return likesId.id;
 		});
 
+	// const
 	const getLikesPosts = () => {
 		dispatch(getLikes());
 		dispatch(getPosts());
 	};
 
+	// fonction qui permet de liker un post
 	const like = async () => {
+		// on dispatch likePost, on passe le post et l'id de l'utilisateur
 		await dispatch(likePost(post, uid));
 
+		// On récupère l'id du like et la relation dans le post
 		getLikesPosts();
+		// on passe le like a true
 		setLiked(true);
-		//setIsloading(false)
 	};
 
-
+	// fonction qui permet de unliker un post
 	const unlike = async () => {
+		// on dispatch unlikePost, on passe le post, l'id de l'utilisateur et l'id du like
 		await dispatch(unlikePost(post, uid, likeId));
 
+		// on passe le like a false
 		setLiked(false);
-		//setIsloading(false)
 	};
 
+	// useEffect, affiche le like true pour l'utilisateur connecté
 	useEffect(() => {
 		if (!isEmpty(postUsersLike[0]) && postUsersLike.includes(uid)) {
 			setLiked(true);

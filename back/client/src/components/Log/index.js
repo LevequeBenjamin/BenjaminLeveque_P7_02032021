@@ -1,4 +1,4 @@
-// ******************** components/Log/index ******************** //
+// ******************** components/Log/index.js ******************** //
 
 // import
 import React, { useState } from 'react';
@@ -10,10 +10,13 @@ const Log = props => {
 	const [signUpModal, setSignUpModal] = useState(props.signup);
 	const [signInModal, setSignInModal] = useState(props.signin);
 
+	// fonction qui permet d'afficher le formulaire pour s'inscrire ou se connecter 
 	const handleModals = e => {
+		// si on clique sur s'inscrire
 		if (e.target.id === 'register') {
 			setSignInModal(false);
 			setSignUpModal(true);
+			// si on clique sur se connecter
 		} else if (e.target.id === 'login') {
 			setSignUpModal(false);
 			setSignInModal(true);

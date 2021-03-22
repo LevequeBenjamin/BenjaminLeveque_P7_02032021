@@ -1,4 +1,4 @@
-// ******************** components/Post/NewPostForm ******************** //
+// ******************** components/Post/NewPostForm.js ******************** //
 
 // imports
 import React, { useEffect, useState } from 'react';
@@ -9,37 +9,49 @@ import { timestamParser, isEmpty } from '../Utils';
 
 /* ******************** NewPostForm ******************** */
 const NewPostForm = () => {
+	// useState
 	const [isLoading, setIsLoading] = useState(true);
 	const [content, setContent] = useState('');
 	const [imageUrl, setImageUrl] = useState(null);
 	const [video, setVideo] = useState('');
 	const [file, setFile] = useState();
+	// store
 	const userData = useSelector(state => state.userReducer);
 	const error = useSelector(state => state.errorReducer.postErrors);
+	// dispatch
 	const dispatch = useDispatch();
 
+	// fonction qui permet de créer un fichier file pour le passer en data, et un objet url pour l'afficher en prévisualisation
 	const handlePicture = e => {
 		setImageUrl(URL.createObjectURL(e.target.files[0]));
 		setFile(e.target.files[0]);
 		setVideo('');
 	};
 
+	// fonction qui permet de créer un post
 	const handlePost = async () => {
+		// on contrôle qu'il y a bien un post
 		if (content || imageUrl || video) {
+			// on crée un objet data
 			const data = new FormData();
 			data.append('userId', userData.id);
 			data.append('content', content);
 			if (file) data.append('file', file);
 			data.append('video', video);
 
+			// on dispatch addPost et on lui passe l'objet data
 			await dispatch(addPost(data));
+			// on dispatch getPosts pour récupérer l'id du post
 			dispatch(getPosts());
+			// on vide le formulaire
 			cancelPost();
+			// on envoi une alerte si il n'y a pas de post
 		} else {
 			alert('Veuillez entrer un message');
 		}
 	};
 
+	// fonction qui permet de vider le formulaire
 	const cancelPost = () => {
 		setContent('');
 		setImageUrl('');
@@ -47,20 +59,28 @@ const NewPostForm = () => {
 		setFile('');
 	};
 
+	// useEffect, prend en charge la vidéo
 	useEffect(() => {
 		if (!isEmpty(userData)) setIsLoading(false);
 
+		// fonction qui permet de lire une viéeo youtube en dehors de youtube
 		const handleVideo = () => {
+			// on split le lien de la vidéo
 			let findLink = content.split(' ');
 			for (let i = 0; i < findLink.length; i++) {
+				// on cherche que le lien est un lien youtube
 				if (
 					findLink[i].includes('https://www.yout') ||
 					findLink[i].includes('https://yout')
 				) {
+					// on remplace le watch par embed
 					let embed = findLink[i].replace('watch?v=', 'embed/');
+					// on retire le time à partir de &
 					setVideo(embed.split('&')[0]);
+					// on supprime le lien de la vidéo
 					findLink.splice(i, 1);
 					setContent(findLink.join(' '));
+					// on supprime la photo du post si il y en a une
 					setImageUrl('');
 				}
 			}

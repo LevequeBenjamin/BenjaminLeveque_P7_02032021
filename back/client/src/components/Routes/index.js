@@ -1,4 +1,4 @@
-// ******************** components/Routes/index ******************** //
+// ******************** components/Routes/index.js ******************** //
 
 // imports
 import React from 'react';

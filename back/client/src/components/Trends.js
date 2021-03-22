@@ -6,29 +6,35 @@ import CardTrend from './Post/CardTrend';
 import { isEmpty } from './Utils';
 
 const Trends = () => {
+	// useState
 	const [showTrend, setShowTrend] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
+	// store
 	const posts = useSelector(state => state.allPostsReducer);
 	const postData = useSelector(state => state.onePostReducer);
 	const usersData = useSelector(state => state.usersReducer);
 	const trendList = useSelector(state => state.trendingReducer);
+	// dispatch
 	const dispatch = useDispatch();
 
+	// useEffect, on récupère les posts les plus liké
 	useEffect(() => {
 		if (!isEmpty(posts[0])) {
+			// on crée un tableau
 			const postsArr = Object.keys(posts).map(i => posts[i]);
-
+			// on trie du plus grand au plus petit
 			let sortedArray = postsArr.sort((a, b) => {
 				return b.Users.length - a.Users.length;
 			});
+			// on garde les 3 plus liké
 			sortedArray.length = 3;
+			// on dispatch getTrends, on lui passe le tableau
 			dispatch(getTrends(sortedArray));
 		}
 	}, [posts, dispatch]);
 
+	// fonction qui permet de d'afficher le post
 	const handleTrend = post => {
 		let postId = post.id;
-		console.log(postId);
 		dispatch(getOnePost(postId));
 		setShowTrend(!showTrend);
 	};
@@ -62,14 +68,8 @@ const Trends = () => {
 
 								<div className="trend-content">
 									<p>{post.content}</p>
-									{!showTrend ? (
-										<span>Lire</span>
-									) : (
-										<span>Fermer</span>
-									)}
-					
+									{!showTrend ? <span>Lire</span> : <span>Fermer</span>}
 								</div>
-							
 							</li>
 						);
 					})}
