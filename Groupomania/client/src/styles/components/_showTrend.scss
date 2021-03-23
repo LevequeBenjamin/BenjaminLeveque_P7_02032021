@@ -1,0 +1,22 @@
+/* ********** components/_showTrend.scss ********** */
+
+.showTrend {
+  position: absolute;
+  padding: 0;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  left: -180%;
+  bottom: 0;
+  //height: calc(100vh - 200px);;
+  width: 200%;
+  transform-origin: center;
+    .card-container {
+      background-color: $color-dark-4;
+      border-radius: 20px;
+      
+      overflow-y: scroll;
+      height: 100% !important;
+    }
+}
