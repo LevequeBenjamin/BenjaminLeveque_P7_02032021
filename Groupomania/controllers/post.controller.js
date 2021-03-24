@@ -6,6 +6,7 @@ const { uploadErrors } = require('../utils/errors.utils');
 const fs = require('fs');
 const { promisify } = require('util');
 const pipeline = promisify(require('stream').pipeline);
+const verifyInput = require('../middleware/verifyInput');
 
 /* ******************** createPost ******************** */
 // permet de créer un post
@@ -13,6 +14,19 @@ exports.createPost = async (req, res) => {
 	let content = req.body.content;
 	let userId = req.body.userId;
 	let filename;
+
+	// if (content != null) {
+	// // on valide le champs
+	// let contentTrue = verifyInput.validPost(content);
+
+	// if (content != null && contentTrue == false) {
+	// 	res
+	// 		.status(200)
+	// 		.send({
+	// 			errors:{errorContent:'Vous devez utiliser entre 3 et 200 caractères et ne pas utiliser de caractères spéciaux !'}
+
+	// 		});
+	// }}
 
 	if (req.file != null) {
 		try {

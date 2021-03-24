@@ -33,7 +33,6 @@ const CardTrend = ({ post }) => {
 	};
 
 	return (
-		<div className="showTrend">
 			<div className="card-container">
 				<div className="card-left">
 					<img
@@ -120,14 +119,12 @@ const CardTrend = ({ post }) => {
 
 							<span>{post.comments}</span>
 						</div>
-						<div></div>
-						<img src="./img/icons/share.svg" alt="share" />
 					</div>
 
-					{showComments && <CardTrendComment post={post} />}
+					{showComments && 
+					<CardTrendComment post={post} />}
 				</div>
 			</div>
-		</div>
 	);
 };
 /* ******************** CardTrend end ******************** */

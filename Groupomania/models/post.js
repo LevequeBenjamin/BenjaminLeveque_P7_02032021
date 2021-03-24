@@ -14,14 +14,15 @@ module.exports = (sequelize, DataTypes) => {
 					allowNull: false,
 				},
 			});
+			models.Post.hasMany(models.Comment);
+			models.Post.hasMany(models.Like);
 		}
 	}
 	Post.init(
 		{
-			content: DataTypes.TEXT,
+			content: DataTypes.STRING,
 			imageUrl: DataTypes.STRING,
 			video: DataTypes.STRING,
-			comments: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

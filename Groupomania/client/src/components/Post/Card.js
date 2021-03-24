@@ -31,9 +31,9 @@ const Card = ({ post }) => {
 
 	// fonction qui permet de supprimer un post
 	const deleteQuote = async () => {
-		setIsLoading(true)
+		setIsLoading(true);
 		await dispatch(deletePost(post.id));
-		setIsLoading(false)
+		setIsLoading(false);
 	};
 
 	// useEffect qui passe le loading a false si le store usersData n'est pas vide
@@ -146,8 +146,6 @@ const Card = ({ post }) => {
 									src="./img/icons/message1.svg"
 									alt="comments"
 								/>
-
-								<span>{post.comments}</span>
 							</div>
 							<div>
 								<LikeButton
@@ -161,7 +159,6 @@ const Card = ({ post }) => {
 									}
 								/>
 							</div>
-							<img src="./img/icons/share.svg" alt="share" />
 						</div>
 
 						{showComments && <CardComments post={post} />}

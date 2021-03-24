@@ -16,6 +16,11 @@
 		padding: 14px 0 0;
 		li {
 			border-bottom: 1px solid $grey;
+			cursor: pointer;
+				&:hover {
+					transform: scale(1.02);
+					transition: 0.2s;
+				}
 		}
 
 		.user-hint {

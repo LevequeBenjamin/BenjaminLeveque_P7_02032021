@@ -3,6 +3,7 @@
 // imports
 import { combineReducers } from 'redux';
 import userReducer from './user.reducer';
+import oneUserReducer from './oneUser.reducer'
 import usersReducer from './users.reducer';
 import postReducer from './post.reducer';
 import allPostsReducer from './allPosts.reducer';
@@ -15,6 +16,7 @@ import onePostReducer from './onePost.reducer';
 /* ******************** combineReducers ******************** */
 export default combineReducers({
 	userReducer,
+	oneUserReducer,
 	usersReducer,
 	postReducer,
 	allPostsReducer,

@@ -24,6 +24,11 @@
       border-bottom: 1px solid $grey;
       padding: 16px;
       transition: .2s;
+      cursor: pointer;
+				&:hover {
+					transform: scale(1.02);
+          transition: 0.5s;
+				}
 
       div {
         height: 56px;

@@ -12,6 +12,18 @@ const SignUpForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [controlPassword, setControlPassword] = useState('');
+	const [masked, setMasked] = useState(false);
+	const [typeInput, setTypeInput] = useState('password');
+
+	const mask = () => {
+		setMasked(false);
+		setTypeInput('password');
+	};
+
+	const unMask = () => {
+		setMasked(true);
+		setTypeInput('text');
+	};
 
 	// fonction qui permet de créer un utilisateur
 	const handleRegister = async e => {
@@ -57,7 +69,8 @@ const SignUpForm = () => {
 						res.data.errorEmail ||
 						res.data.errorPassword ||
 						res.data.errorUsername ||
-						res.data.errors
+						res.data.errors ||
+						res.data.errorBrute
 					) {
 						if (res.data.errorEmail) {
 							emailError.innerHTML = res.data.errorEmail;
@@ -73,6 +86,9 @@ const SignUpForm = () => {
 						}
 						if (res.data.errors.email) {
 							emailError.innerHTML = res.data.errors.email;
+						}
+						if (res.data.errorBrute) {
+							passwordError.innerHTML = res.data.errorBrute;
 						}
 					} else {
 						setFormSubmit(true);
@@ -116,21 +132,27 @@ const SignUpForm = () => {
 					/>
 					<div className="email error"></div>
 					<br />
+					<div className='password-container'>
 					<label htmlFor="password">Mot de passe</label>
 					<br />
 					<input
-						type="password"
+						type={typeInput}
 						name="password"
 						id="password"
 						onChange={e => setPassword(e.target.value)}
 						value={password}
 					/>
+					{masked === true && <i class="fas fa-eye" onClick={mask}></i>}
+					{masked === false && (
+						<i class="fas fa-eye-slash" onClick={unMask}></i>
+					)}
+					</div>
 					<div className="password error"></div>
 					<br />
 					<label htmlFor="password-conf">Confirmer mot de passe</label>
 					<br />
 					<input
-						type="password"
+						type={typeInput}
 						name="password"
 						id="password-conf"
 						onChange={e => setControlPassword(e.target.value)}

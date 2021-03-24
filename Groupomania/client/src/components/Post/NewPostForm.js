@@ -160,6 +160,7 @@ const NewPostForm = () => {
 							</div>
 							{!isEmpty(error.format) && <p>{error.format}</p>}
 							{!isEmpty(error.maxSize) && <p>{error.maxSize}</p>}
+						 {!isEmpty(error.errorContent) && <p>{error.errorContent}</p>} 
 							<div className="btn-send">
 								{content || imageUrl || video.length > 20 ? (
 									<button className="cancel" onClick={cancelPost}>

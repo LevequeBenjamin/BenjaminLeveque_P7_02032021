@@ -42,7 +42,18 @@
 						}
 					}
 				}
+				.password-container {
+					position: relative;
+					i {
+						position: absolute;
+						right: 10px;
+						top: 34px;
+					}
+					
+				}
+
 				form {
+					margin: auto;
 					input {
 						background-color: $color-dark-3;
 						color: $white;

@@ -1,11 +1,12 @@
 // ******************** components/Profil/Contact.js******************** //
 
-
 // import
 import React, { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOneUser } from '../../actions/user.actions';
 import { UidContext } from '../AppContext';
 import { isEmpty } from '../Utils';
+import ProfilTrend from './ProfilTrend';
 
 /* ******************** Contact ******************** */
 const Contact = () => {
@@ -13,10 +14,14 @@ const Contact = () => {
 	const [isLoading, setIsloading] = useState(true);
 	const [playOnce, setPlayOnce] = useState(true);
 	const [contact, setContact] = useState([]);
+	const [showTrend, setShowTrend] = useState(false);
 	// store
 	const usersData = useSelector(state => state.usersReducer);
+	const oneUserData = useSelector(state => state.oneUserReducer);
 	// id de l'utilisateur connecté
 	const uid = useContext(UidContext);
+	// dispatch
+	const dispatch = useDispatch();
 
 	// useEffect, on affiche un nombre de contact selon la hauteur de l'ecran
 	useEffect(() => {
@@ -49,6 +54,12 @@ const Contact = () => {
 		}
 	}, [usersData, playOnce]);
 
+	const handleTrend = user => {
+		let userId = user.id;
+		dispatch(getOneUser(userId));
+		setShowTrend(!showTrend);
+	};
+
 	return (
 		<div className="contact-container">
 			<h4>Contact</h4>
@@ -62,7 +73,11 @@ const Contact = () => {
 						contact.map(user => {
 							if (user.id !== uid) {
 								return (
-									<li className="user-hint" key={user.id}>
+									<li
+										className="user-hint"
+										key={user.id}
+										onClick={e => handleTrend(user)}
+									>
 										<img src={user.pictureUrl} alt="user-pic" />
 										<p>{user.username}</p>
 									</li>
@@ -71,6 +86,12 @@ const Contact = () => {
 							return null;
 						})}
 				</ul>
+			)}
+			{showTrend && (
+				<div className='showTrendProfil' onClick={() => setShowTrend(!showTrend)}>
+					<span class="fas fa-plus-circle" onClick={() => setShowTrend(!showTrend)}></span>
+					<ProfilTrend oneUser={oneUserData} />
+				</div>
 			)}
 		</div>
 	);

@@ -5,9 +5,10 @@ import axios from 'axios';
 
 // const
 export const GET_USER = 'GET_USER';
+export const GET_ONE_USER = 'GET_ONE_USER';
 export const UPLOAD_PICTURE = 'UPLOAD_PICTURE';
 export const UPDATE_BIO = 'UPDATE_BIO';
-export const DELETE_USER = 'DELETE_USER'
+export const DELETE_USER = 'DELETE_USER';
 
 // errors
 export const GET_USER_ERRORS = 'GET_USER_ERRORS';
@@ -19,6 +20,19 @@ export const getUser = uid => {
 			.get(`${process.env.REACT_APP_API_URL}api/user/${uid}`)
 			.then(res => {
 				dispatch({ type: GET_USER, payload: res.data });
+			})
+			.catch(err => console.log(err));
+	};
+};
+/* ******************** getUser end ******************** */
+
+/* ******************** getUser ******************** */
+export const getOneUser = userId => {
+	return dispatch => {
+		return axios
+			.get(`${process.env.REACT_APP_API_URL}api/user/${userId}`)
+			.then(res => {
+				dispatch({ type: GET_ONE_USER, payload: res.data });
 			})
 			.catch(err => console.log(err));
 	};

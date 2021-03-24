@@ -25,16 +25,6 @@ exports.commentPost = async (req, res) => {
 		} else {
 			res.status(401).send({ error: 'désolé, quelque chose à mal tourné' });
 		}
-		const postFound = await models.Post.findOne({
-			where: { id: postId },
-		});
-		if (postFound) {
-			await postFound.update({
-				comments: postFound.comments + 1,
-			});
-		} else {
-			res.status(400).json({ error: 'impossible de récupérer le post' });
-		}
 	} catch (error) {
 		res.status(400).send({ error });
 	}
@@ -119,16 +109,6 @@ exports.deleteCommentPost = async (req, res) => {
 		await models.Comment.destroy({
 			where: { id: commentId },
 		});
-		const postFound = await models.Post.findOne({
-			where: { id: postId },
-		});
-		if (postFound) {
-			await postFound.update({
-				comments: postFound.comments - 1,
-			});
-		} else {
-			res.status(400).json({ error: 'cannot fetch user !' });
-		}
 		res.status(200).send({ message: 'commentaire supprimé' });
 	} catch (error) {
 		res.status(500).send({ error });

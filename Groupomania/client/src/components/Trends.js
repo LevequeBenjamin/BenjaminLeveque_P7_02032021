@@ -68,13 +68,18 @@ const Trends = () => {
 
 								<div className="trend-content">
 									<p>{post.content}</p>
-									{!showTrend ? <span>Lire</span> : <span>Fermer</span>}
+									<span>Lire</span>
 								</div>
 							</li>
 						);
 					})}
 			</ul>
-			{showTrend && <CardTrend post={postData} />}
+			{showTrend && (
+				<div className="showTrend">
+						<span class="fas fa-plus-circle" onClick={() => setShowTrend(!showTrend)}></span>
+					<CardTrend post={postData} />
+				</div>
+			)}
 		</div>
 	);
 };

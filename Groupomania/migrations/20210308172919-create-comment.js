@@ -38,7 +38,7 @@ module.exports = {
       },
       content: {
         allowNull: false,
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         onDelete: 'CASCADE',
       },
       createdAt: {
