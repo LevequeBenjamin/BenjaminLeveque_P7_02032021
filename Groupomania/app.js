@@ -3,7 +3,7 @@
 // imports
 const express = require('express');
 const helmet = require('helmet');
-const sanitizeMiddleware = require('sanitize-middleware');
+//const sanitizeMiddleware = require('sanitize-middleware');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/user.routes');
 const postRoutes = require('./routes/post.routes');
@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(helmet());
-app.use(sanitizeMiddleware());
+//app.use(sanitizeMiddleware());
 
 
 // jwt
