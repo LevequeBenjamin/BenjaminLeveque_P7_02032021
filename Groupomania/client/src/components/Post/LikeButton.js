@@ -77,7 +77,7 @@ const LikeButton = ({ post, postUsersLike }) => {
 				<div className="like-container">
 					{uid === null && (
 						<Popup
-							trigger={<img src="./img/icons/heart.svg" alt="like" />}
+							trigger={<img src="./img/icons/heart.svg" alt="like"/>}
 							position={['bottom center', 'bottom right', 'bottom left']}
 							closeOnDocumentClick
 						>

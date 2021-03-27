@@ -4,11 +4,10 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImg from './UploadImg';
-import { getUser, updateBio } from '../../actions/user.actions';
+import { updateBio } from '../../actions/user.actions';
 import { dateParser } from '../Utils';
 import axios from 'axios';
 import cookie from 'js-cookie';
-import { getPosts } from '../../actions/post.actions';
 
 /* ******************** UpdateProfil ******************** */
 const UpdateProfil = () => {
@@ -31,7 +30,7 @@ const UpdateProfil = () => {
 	};
 
 	// fonction qui permet de supprimer le compte de l'utilisateur
-	const handleDelete = e => {
+	const handleDelete = async e => {
 		const passwordError = document.querySelector('.password.error');
 
 		// fonction qui permet de supprimer le cookie
@@ -42,10 +41,11 @@ const UpdateProfil = () => {
 		};
 
 		// methode delete, on passe l'id de l'utilisateur en params et le password en data
-		axios({
+		await axios({
 			method: 'delete',
 			url: `${process.env.REACT_APP_API_URL}api/user/${userData.id}`,
 			data: { password },
+			withCredentials: true,
 		})
 			.then(async function (res) {
 				// on attrape l'erreur en réponse
@@ -53,11 +53,16 @@ const UpdateProfil = () => {
 					// on affiche l'erreur à l'utilisateur
 					passwordError.innerHTML = res.data.errorPassword;
 				} else {
-					// on supprime le cookie
-					await removeCookie('jwt');
-					// on met à jour le store
-					dispatch(getUser());
-					dispatch(getPosts());
+					// methode get pour supprimer le cookie
+					await axios({
+						method: 'get',
+						url: `${process.env.REACT_APP_API_URL}api/user/logout`,
+						withCredentials: true,
+					})
+						// on supprime le cookie jwt
+						.then(() => removeCookie('jwt'))
+						.catch(err => console.log(err));
+
 					// on actualise la page
 					window.location = '/';
 				}
@@ -108,28 +113,31 @@ const UpdateProfil = () => {
 					)}
 					{deleteForm && (
 						<>
-							<p>Confirmer votre mot de passe</p>
-							<div className="password error"></div>
-							<input
-								type="password"
-								name="password"
-								id="password"
-								onChange={e => setPassword(e.target.value)}
-								value={password}
-							/>
-							<button
-								onClick={() => {
-									if (
-										window.confirm(
-											'Voulez-vous vraiment supprimer votre compte ?',
-										)
-									) {
-										handleDelete();
-									}
-								}}
-							>
-								Valider la suppression
-							</button>
+							<div className="form-password">
+								<label htmlFor="password">Confirmer votre mot de passe</label>
+								<div className="password error"></div>
+
+								<input
+									type="password"
+									name="password"
+									id="password"
+									onChange={e => setPassword(e.target.value)}
+									value={password}
+								/>
+								<button
+									onClick={() => {
+										if (
+											window.confirm(
+												'Voulez-vous vraiment supprimer votre compte ?',
+											)
+										) {
+											handleDelete();
+										}
+									}}
+								>
+									Valider la suppression
+								</button>
+							</div>
 						</>
 					)}
 				</div>

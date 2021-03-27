@@ -1,4 +1,4 @@
-// ******************** trend.actions ******************** //
+// ******************** actions/trend.actions ******************** //
 
 // const
 export const GET_TRENDS = 'GET_TRENDS';

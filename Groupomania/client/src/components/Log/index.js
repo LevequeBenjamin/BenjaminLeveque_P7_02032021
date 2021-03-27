@@ -10,7 +10,7 @@ const Log = props => {
 	const [signUpModal, setSignUpModal] = useState(props.signup);
 	const [signInModal, setSignInModal] = useState(props.signin);
 
-	// fonction qui permet d'afficher le formulaire pour s'inscrire ou se connecter 
+	// fonction qui permet d'afficher le formulaire pour s'inscrire ou se connecter
 	const handleModals = e => {
 		// si on clique sur s'inscrire
 		if (e.target.id === 'register') {

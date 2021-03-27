@@ -132,20 +132,20 @@ const SignUpForm = () => {
 					/>
 					<div className="email error"></div>
 					<br />
-					<div className='password-container'>
-					<label htmlFor="password">Mot de passe</label>
-					<br />
-					<input
-						type={typeInput}
-						name="password"
-						id="password"
-						onChange={e => setPassword(e.target.value)}
-						value={password}
-					/>
-					{masked === true && <i class="fas fa-eye" onClick={mask}></i>}
-					{masked === false && (
-						<i class="fas fa-eye-slash" onClick={unMask}></i>
-					)}
+					<div className="password-container">
+						<label htmlFor="password">Mot de passe</label>
+						<br />
+						<input
+							type={typeInput}
+							name="password"
+							id="password"
+							onChange={e => setPassword(e.target.value)}
+							value={password}
+						/>
+						{masked === true && <i className="fas fa-eye" onClick={mask}></i>}
+						{masked === false && (
+							<i className="fas fa-eye-slash" onClick={unMask}></i>
+						)}
 					</div>
 					<div className="password error"></div>
 					<br />

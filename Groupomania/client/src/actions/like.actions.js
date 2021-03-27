@@ -1,4 +1,4 @@
-// ******************** like.actions ******************** //
+// ******************** actions/like.actions ******************** //
 
 import axios from 'axios';
 
@@ -10,8 +10,11 @@ export const UNLIKE_POST = 'UNLIKE_POST';
 /* ******************** getLikes ******************** */
 export const getLikes = () => {
 	return dispatch => {
-		return axios
-			.get(`${process.env.REACT_APP_API_URL}api/post/read-like-post`)
+		return axios({
+			method: 'get',
+			url: `${process.env.REACT_APP_API_URL}api/post/read-like-post`,
+			withCredentials: true,
+		})
 			.then(res => {
 				dispatch({ type: GET_LIKES, payload: res.data });
 			})
@@ -23,14 +26,11 @@ export const getLikes = () => {
 /* ******************** likePost ******************** */
 export const likePost = (post, uid) => {
 	return dispatch => {
-		return axios
-			.patch(
-				`${process.env.REACT_APP_API_URL}api/post/${post.id}/like-post/${uid}`,
-			)
-			// .then(res => {
-			// 	dispatch({ type: LIKE_POST, payload: post.id });
-			// })
-			// .catch(err => console.log(err));
+		return axios({
+			method: 'patch',
+			url: `${process.env.REACT_APP_API_URL}api/post/${post.id}/like-post/${uid}`,
+			withCredentials: true,
+		});
 	};
 };
 /* ******************** likePost end ******************** */
@@ -39,17 +39,13 @@ export const likePost = (post, uid) => {
 export const unlikePost = (post, uid) => {
 	let postId = post.id;
 	return dispatch => {
-		return axios
-			.delete(
-				`${process.env.REACT_APP_API_URL}api/post/${post.id}/unlike-post/${uid}`,
-			)
-			// .then(res => {
-			// 	let postLikedId = post.id;
-			// 	dispatch({ type: UNLIKE_POST, payload:{postLikedId, uid} });
-			// })
-			// .catch(err => console.log(err));
+		return axios({
+			method: 'delete',
+			url: `${process.env.REACT_APP_API_URL}api/post/${post.id}/unlike-post/${uid}`,
+			withCredentials: true,
+		})
 			.then(res => {
-				dispatch({ type: UNLIKE_POST, payload: {postId, uid} });
+				dispatch({ type: UNLIKE_POST, payload: { postId, uid } });
 			})
 			.catch(err => console.log(err));
 	};

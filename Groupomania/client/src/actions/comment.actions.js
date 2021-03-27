@@ -1,4 +1,4 @@
-// ******************** comment.actions ******************** //
+// ******************** actions/comment.actions ******************** //
 
 // imports
 import axios from 'axios';
@@ -12,8 +12,11 @@ export const DELETE_COMMENT = 'DELETE_COMMENT';
 /* ******************** getComments ******************** */
 export const getComments = () => {
 	return dispatch => {
-		return axios
-			.get(`${process.env.REACT_APP_API_URL}api/post/read-comment-post`)
+		return axios({
+			method: 'get',
+			url: `${process.env.REACT_APP_API_URL}api/post/read-comment-post`,
+			withCredentials: true,
+		})
 			.then(res => {
 				dispatch({ type: GET_COMMENTS, payload: res.data });
 			})
@@ -27,11 +30,12 @@ export const addComment = (post, userData, content) => {
 	let commenterId = userData.username;
 	let postId = post.id;
 	return dispatch => {
-		return axios
-			.patch(
-				`${process.env.REACT_APP_API_URL}api/post/${post.id}/comment-post/${userData.id}`,
-				{ content, commenterId },
-			)
+		return axios({
+			method: 'patch',
+			url: `${process.env.REACT_APP_API_URL}api/post/${post.id}/comment-post/${userData.id}`,
+			data: { content, commenterId },
+			withCredentials: true,
+		})
 			.then(res => {
 				dispatch({ type: ADD_COMMENT, payload: postId });
 			})
@@ -41,12 +45,13 @@ export const addComment = (post, userData, content) => {
 /* ******************** addComment end ******************** */
 
 /* ******************** deleteComment ******************** */
-export const deleteComment = (commentId, postId)=> {
+export const deleteComment = (commentId, postId) => {
 	return dispatch => {
-		return axios
-			.delete(
-				`${process.env.REACT_APP_API_URL}api/post/${postId}/delete-comment-post/${commentId}`,
-			)
+		return axios({
+			method: 'delete',
+			url: `${process.env.REACT_APP_API_URL}api/post/${postId}/delete-comment-post/${commentId}`,
+			withCredentials: true,
+		})
 			.then(res => {
 				dispatch({ type: DELETE_COMMENT, payload: { commentId } });
 			})
@@ -58,11 +63,12 @@ export const deleteComment = (commentId, postId)=> {
 /* ******************** updateComment ******************** */
 export const updateComment = (commentId, content) => {
 	return dispatch => {
-		return axios
-			.patch(
-				`${process.env.REACT_APP_API_URL}api/post/comment-post/${commentId}`,
-				{ content },
-			)
+		return axios({
+			method: 'patch',
+			url: `${process.env.REACT_APP_API_URL}api/post/comment-post/${commentId}`,
+			data: { content },
+			withCredentials: true,
+		})
 			.then(res => {
 				dispatch({ type: UPDATE_COMMENT, payload: { commentId, content } });
 			})

@@ -103,6 +103,7 @@ exports.deleteUser = async (req, res) => {
 					try {
 						user
 							.destroy()
+
 							.then(
 								res
 									.status(200)

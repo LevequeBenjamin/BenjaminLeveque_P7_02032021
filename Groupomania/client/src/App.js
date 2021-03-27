@@ -1,4 +1,4 @@
-// ******************** src/App ******************** //
+// ******************** src/App.js ******************** //
 
 // imports
 import React, { useEffect, useState } from 'react';

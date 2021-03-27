@@ -5,9 +5,21 @@ const jwt = require('jsonwebtoken');
 const models = require('../models');
 require('dotenv').config({ path: '../config/.env' });
 
+// constant
+const maxAge = 3 * 24 * 60 * 60 * 1000;
+
+//* ******************** generateToken ******************** *//
+exports.generateToken = id => {
+	return jwt.sign({ id }, process.env.JWT_TOKEN, {
+		expiresIn: maxAge,
+	});
+};
+//* ******************** generateToken end ******************** *//
+
 //* ******************** checkUser ******************** *//
 exports.checkUser = (req, res, next) => {
 	const token = req.cookies.jwt;
+	console.log(token);
 	if (token) {
 		jwt.verify(token, process.env.JWT_TOKEN, async (err, decodedToken) => {
 			if (err) {
@@ -15,10 +27,16 @@ exports.checkUser = (req, res, next) => {
 				res.cookie('jwt', '', { maxAge: 1 });
 				next();
 			} else {
-				let user = await models.User.findByPk(decodedToken.userId);
-				res.locals.user = user;
-				console.log(res.locals.user);
-				next();
+				let user = await models.User.findOne({
+					where: { id: decodedToken.id },
+				});
+				if (user) {
+					res.locals.user = user;
+					console.log(user);
+					next();
+				} else {
+					res.status(400).send({ message: "l'utilisateur n'a pas été trouvé" });
+				}
 			}
 		});
 	} else {
@@ -28,7 +46,7 @@ exports.checkUser = (req, res, next) => {
 };
 //* ******************** checkUser end ******************** *//
 
-/* ******************** requireAuth ******************** */
+//* ******************** requireAuth ******************** *//
 exports.requireAuth = (req, res, next) => {
 	const token = req.cookies.jwt;
 	console.log(token);
@@ -37,7 +55,7 @@ exports.requireAuth = (req, res, next) => {
 			if (err) {
 				console.log(err);
 			} else {
-				console.log(decodedToken.userId);
+				console.log(decodedToken.id);
 				next();
 			}
 		});
@@ -45,4 +63,4 @@ exports.requireAuth = (req, res, next) => {
 		console.log('no token !');
 	}
 };
-/* ******************** requireAuth end ******************** */
+//* ******************** requireAuth end ******************** *//

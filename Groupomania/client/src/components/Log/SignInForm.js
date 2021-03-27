@@ -79,9 +79,9 @@ const SignInForm = () => {
 			/>
 			<div className="email error"></div>
 			<br />
-			<div className='password-container'>
-			<label htmlFor="password">Mot de passe</label>
-			<br />
+			<div className="password-container">
+				<label htmlFor="password">Mot de passe</label>
+				<br />
 				<input
 					type={typeInput}
 					name="password"
@@ -89,8 +89,10 @@ const SignInForm = () => {
 					onChange={e => setPassword(e.target.value)}
 					value={password}
 				/>
-				{masked === true && <i class="fas fa-eye" onClick={mask}></i>}
-				{masked === false && <i class="fas fa-eye-slash" onClick={unMask}></i>}
+				{masked === true && <i className="fas fa-eye" onClick={mask}></i>}
+				{masked === false && (
+					<i className="fas fa-eye-slash" onClick={unMask}></i>
+				)}
 			</div>
 			<div className="password error"></div>
 			<br />

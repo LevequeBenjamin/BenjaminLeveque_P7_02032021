@@ -3,7 +3,7 @@
 // imports
 const models = require('../models');
 const bcrypt = require('bcrypt');
-const jwtUtils = require('../utils/jwt.utils');
+const { generateToken } = require('../middleware/auth.middleware');
 const verifyInput = require('../middleware/verifyInput');
 const { signUpErrors } = require('../utils/errors.utils');
 require('dotenv').config({ path: '../config/.env' });
@@ -86,10 +86,10 @@ exports.login = async (req, res) => {
 						.send({ errorPassword: 'Le mot de passe ne correspond pas' });
 				}
 				// on crée un token est on le passe dans le cookie
-				const token = jwtUtils.generateTokenForUser(user);
+				const token = generateToken(user.id);
 				res.cookie('jwt', token, { httpOnly: true, maxAge });
 				res.status(200).send({
-					id: user.id,
+					user: user.id,
 				});
 			})
 			.catch(error => res.status(500).send({ error }));

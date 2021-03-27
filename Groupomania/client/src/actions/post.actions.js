@@ -1,4 +1,4 @@
-// ******************** post.actions ******************** //
+// ******************** actions/post.actions.js ******************** //
 
 // import
 import axios from 'axios';
@@ -17,8 +17,11 @@ export const GET_POST_ERRORS = 'GET_POST_ERRORS';
 /* ******************** getPosts ******************** */
 export const getPosts = num => {
 	return dispatch => {
-		return axios
-			.get(`${process.env.REACT_APP_API_URL}api/post`)
+		return axios({
+			method: 'get',
+			url: `${process.env.REACT_APP_API_URL}api/post`,
+			withCredentials: true,
+		})
 			.then(res => {
 				const array = res.data.slice(0, num);
 				dispatch({ type: GET_POSTS, payload: array });
@@ -30,10 +33,13 @@ export const getPosts = num => {
 /* ******************** getPosts end ******************** */
 
 /* ******************** getOnePost ******************** */
-export const getOnePost = (postId) => {
+export const getOnePost = postId => {
 	return dispatch => {
-		return axios
-			.get(`${process.env.REACT_APP_API_URL}api/post/read-one-post/${postId}`)
+		return axios({
+			method: 'get',
+			url: `${process.env.REACT_APP_API_URL}api/post/read-one-post/${postId}`,
+			withCredentials: true,
+		})
 			.then(res => {
 				dispatch({ type: GET_ONE_POST, payload: res.data });
 			})
@@ -46,16 +52,19 @@ export const getOnePost = (postId) => {
 export const addPost = data => {
 	console.log(data);
 	return dispatch => {
-		return axios
-			.post(`${process.env.REACT_APP_API_URL}api/post`, data)
-			.then(res => {
-				console.log(res.data);
-				if (res.data.errors) {
-					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
-				} else {
-					dispatch({ type: GET_POST_ERRORS, payload: '' });
-				}
-			});
+		return axios({
+			method: 'post',
+			url: `${process.env.REACT_APP_API_URL}api/post`,
+			data: data,
+			withCredentials: true,
+		}).then(res => {
+			console.log(res.data);
+			if (res.data.errors) {
+				dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+			} else {
+				dispatch({ type: GET_POST_ERRORS, payload: '' });
+			}
+		});
 	};
 };
 /* ******************** addPost end ******************** */
@@ -67,6 +76,7 @@ export const updatePost = (postId, content) => {
 			method: 'put',
 			url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
 			data: { content },
+			withCredentials: true,
 		})
 			.then(res => {
 				dispatch({ type: UPDATE_POST, payload: { content, postId } });
@@ -82,6 +92,7 @@ export const deletePost = postId => {
 		return axios({
 			method: 'delete',
 			url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
+			withCredentials: true,
 		})
 			.then(res => {
 				dispatch({ type: DELETE_POST, payload: { postId } });
@@ -90,5 +101,3 @@ export const deletePost = postId => {
 	};
 };
 /* ******************** deletePost end ******************** */
-
-
