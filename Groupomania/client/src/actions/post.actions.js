@@ -79,7 +79,12 @@ export const updatePost = (postId, content) => {
 			withCredentials: true,
 		})
 			.then(res => {
-				dispatch({ type: UPDATE_POST, payload: { content, postId } });
+				if (res.data.errors) {
+					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+				} else {
+					dispatch({ type: GET_POST_ERRORS, payload: '' });
+					dispatch({ type: UPDATE_POST, payload: { content, postId } });
+				}
 			})
 			.catch(err => console.log(err));
 	};

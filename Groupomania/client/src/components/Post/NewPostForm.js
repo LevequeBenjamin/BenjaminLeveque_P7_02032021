@@ -117,7 +117,7 @@ const NewPostForm = () => {
 								<div className="card-left">
 									<img src={userData.pictureUrl} alt="user-pic" />
 								</div>
-								<div className="card-right">
+								<div className="card-right overflow">
 									<div className="card-header">
 										<div className="pseudo">
 											<h3>{userData.username}</h3>
@@ -158,9 +158,15 @@ const NewPostForm = () => {
 									<button onClick={() => setVideo('')}>Supprimer vidéo</button>
 								)}
 							</div>
-							{!isEmpty(error.format) && <p>{error.format}</p>}
-							{!isEmpty(error.maxSize) && <p>{error.maxSize}</p>}
-						 {!isEmpty(error.errorContent) && <p>{error.errorContent}</p>} 
+							{!isEmpty(error.format) && (
+								<p className="error">{error.format}</p>
+							)}
+							{!isEmpty(error.maxSize) && (
+								<p className="error">{error.maxSize}</p>
+							)}
+							{!isEmpty(error.errorContent) && (
+								<p className="error">{error.errorContent}</p>
+							)}
 							<div className="btn-send">
 								{content || imageUrl || video.length > 20 ? (
 									<button className="cancel" onClick={cancelPost}>

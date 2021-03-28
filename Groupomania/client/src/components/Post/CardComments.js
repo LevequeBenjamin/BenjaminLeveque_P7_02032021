@@ -15,6 +15,7 @@ const CardComments = ({ post }) => {
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
 	const commentData = useSelector(state => state.commentReducer);
+	const error = useSelector(state => state.errorReducer.postErrors);
 	// dispatch
 	const dispatch = useDispatch();
 
@@ -94,6 +95,7 @@ const CardComments = ({ post }) => {
 						placeholder="Laisser un commentaire"
 					/>
 					<br />
+					{!isEmpty(error.errorContentComment) && <p className='error'>{error.errorContentComment}</p>}
 					<input type="submit" value="Envoyer" />
 				</form>
 			)}

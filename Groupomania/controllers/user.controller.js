@@ -3,6 +3,7 @@
 // imports
 const models = require('../models');
 const bcrypt = require('bcrypt');
+const verifyInput = require('../middleware/verifyInput');
 
 /* ******************** getUser ******************** */
 // permet de récuperer un utilisateur dans la bd
@@ -63,6 +64,21 @@ exports.getAllUsers = async (req, res) => {
 /* ******************** updateUser ******************** */
 // permet de modifier un utilisateur
 exports.updateUser = async (req, res) => {
+	let bio = req.body.bio;
+
+	// on valide le champs
+	let bioTrue = verifyInput.validBio(bio);
+
+	if (bio && bioTrue == false) {
+		res.status(200).send({
+			errors: {
+				errorBio:
+					'Vous devez utiliser entre 3 et 150 caractères et ne pas utiliser de caractères spéciaux !',
+			},
+		});
+		res.status(400).send({ error: 'error' });
+	}
+
 	try {
 		const user = await models.User.findOne({
 			attributes: ['bio', 'id'],
@@ -70,7 +86,7 @@ exports.updateUser = async (req, res) => {
 		});
 		await user
 			.update({
-				bio: req.body.bio,
+				bio: bio,
 			})
 			.then(res.status(200).send({ message: 'bio modifié !' }))
 			.catch(error => res.status(400).send(error));

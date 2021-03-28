@@ -3,6 +3,7 @@
 // imports
 const express = require('express');
 const helmet = require('helmet');
+//const sqlinjection = require('sql-injection');
 //const sanitizeMiddleware = require('sanitize-middleware');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -49,7 +50,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
 app.use(helmet());
+//app.use(sqlinjection);
 //app.use(sanitizeMiddleware());
 
 // jwt

@@ -2,16 +2,30 @@
 
 // imports
 const models = require('../models');
+const verifyInput = require('../middleware/verifyInput');
 
 /* ******************** commentPost ******************** */
 // permet de commenter un post
 exports.commentPost = async (req, res) => {
-	try {
-		let userId = req.params.userId;
-		let postId = req.params.id;
-		let commenterId = req.body.commenterId;
-		let content = req.body.content;
+	let userId = req.params.userId;
+	let postId = req.params.id;
+	let commenterId = req.body.commenterId;
+	let content = req.body.content;
 
+	// on valide le champs
+	let contentTrue = verifyInput.validComment(content);
+
+	if (content && contentTrue == false) {
+		res.status(200).send({
+			errors: {
+				errorContentComment:
+					'Vous devez utiliser entre 3 et 150 caractères et ne pas utiliser de caractères spéciaux !',
+			},
+		});
+		res.status(400).send({ error: 'error' });
+	}
+
+	try {
 		// création du commentaire
 		const newComment = await models.Comment.create({
 			postId: postId,
@@ -34,10 +48,23 @@ exports.commentPost = async (req, res) => {
 /* ******************** updatePost ******************** */
 // permet de commenter un post
 exports.updatePost = async (req, res) => {
-	try {
-		let content = req.body.content;
-		let commentId = req.params.id;
+	let content = req.body.content;
+	let commentId = req.params.id;
 
+	// on valide le champs
+	let contentTrue = verifyInput.validComment(content);
+
+	if (content && contentTrue == false) {
+		res.status(200).send({
+			errors: {
+				errorContentComment:
+					'Vous devez utiliser entre 3 et 150 caractères et ne pas utiliser de caractères spéciaux !',
+			},
+		});
+		res.status(400).send({ error: 'error' });
+	}
+
+	try {
 		const commentFound = await models.Comment.findOne({
 			attributes: [
 				'id',
@@ -85,7 +112,7 @@ exports.readCommentPost = async (req, res) => {
 			return res.status(400).send({ error: "il n'y a pas de commentaires" });
 		}
 	} catch (error) {
-		res.status(400).send({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** readCommentPost end ******************** */
@@ -94,7 +121,6 @@ exports.readCommentPost = async (req, res) => {
 exports.deleteCommentPost = async (req, res) => {
 	try {
 		let commentId = req.params.id;
-		let postId = req.params.postId;
 
 		// on contrôle que le commentaire existe dans la bd
 		const commentFound = await models.Comment.findOne({

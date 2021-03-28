@@ -21,7 +21,7 @@ const Navbar = () => {
 					<NavLink exact to="/">
 						<div className="logo">
 							<img src="./img/icon.svg" alt="icon" />
-							<h3>Groupomania</h3>
+							<h1>Groupomania</h1>
 						</div>
 					</NavLink>
 				</div>

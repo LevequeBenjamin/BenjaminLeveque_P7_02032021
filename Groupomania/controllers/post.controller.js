@@ -15,18 +15,18 @@ exports.createPost = async (req, res) => {
 	let userId = req.body.userId;
 	let filename;
 
-	// if (content != null) {
-	// // on valide le champs
-	// let contentTrue = verifyInput.validPost(content);
+	// on valide le champs
+	let contentTrue = verifyInput.validPost(content);
 
-	// if (content != null && contentTrue == false) {
-	// 	res
-	// 		.status(200)
-	// 		.send({
-	// 			errors:{errorContent:'Vous devez utiliser entre 3 et 200 caractères et ne pas utiliser de caractères spéciaux !'}
-
-	// 		});
-	// }}
+	if (content && contentTrue == false) {
+		res.status(200).send({
+			errors: {
+				errorContent:
+					'Vous devez utiliser entre 3 et 250 caractères et ne pas utiliser de caractères spéciaux !',
+			},
+		});
+		res.status(400).send({ error: 'error' });
+	}
 
 	if (req.file != null) {
 		try {
@@ -121,6 +121,19 @@ exports.readOnePost = async (req, res) => {
 // permet de modifier un post
 exports.updatePost = async (req, res) => {
 	let content = req.body.content;
+
+	// on valide le champs
+	let contentTrue = verifyInput.validPost(content);
+
+	if (content && contentTrue == false) {
+		res.status(200).send({
+			errors: {
+				errorContent:
+					'Vous devez utiliser entre 3 et 250 caractères et ne pas utiliser de caractères spéciaux !',
+			},
+		});
+		res.status(400).send({ error: 'error' });
+	}
 
 	try {
 		const post = await models.Post.findOne({

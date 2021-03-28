@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UploadImg from './UploadImg';
 import { updateBio } from '../../actions/user.actions';
-import { dateParser } from '../Utils';
+import { dateParser, isEmpty } from '../Utils';
 import axios from 'axios';
 import cookie from 'js-cookie';
 
@@ -101,6 +101,9 @@ const UpdateProfil = () => {
 								></textarea>
 								<button onClick={handleUpdate}>Valider modifications</button>
 							</>
+						)}
+						{!isEmpty(error.errorBio) && (
+							<p className="error">{error.errorBio}</p>
 						)}
 					</div>
 					<h4>Membre depuis le : {dateParser(userData.createdAt)}</h4>

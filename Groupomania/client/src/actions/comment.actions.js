@@ -2,6 +2,7 @@
 
 // imports
 import axios from 'axios';
+import { GET_POST_ERRORS } from './post.actions';
 
 // const
 export const GET_COMMENTS = 'GET_COMMENTS';
@@ -37,7 +38,12 @@ export const addComment = (post, userData, content) => {
 			withCredentials: true,
 		})
 			.then(res => {
-				dispatch({ type: ADD_COMMENT, payload: postId });
+				if (res.data.errors) {
+					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+				} else {
+					dispatch({ type: GET_POST_ERRORS, payload: '' });
+					dispatch({ type: ADD_COMMENT, payload: postId });
+				}
 			})
 			.catch(err => console.log(err));
 	};
@@ -70,7 +76,12 @@ export const updateComment = (commentId, content) => {
 			withCredentials: true,
 		})
 			.then(res => {
-				dispatch({ type: UPDATE_COMMENT, payload: { commentId, content } });
+				if (res.data.errors) {
+					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+				} else {
+					dispatch({ type: GET_POST_ERRORS, payload: '' });
+					dispatch({ type: UPDATE_COMMENT, payload: { commentId, content } });
+				}
 			})
 			.catch(err => console.log(err));
 	};

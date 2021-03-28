@@ -24,7 +24,7 @@ exports.signUp = async (req, res) => {
 	if (usernameTrue == false) {
 		res.status(200).send({
 			errorUsername:
-				'username non valid ! (Il doit contenir entre 3 et 36 caractères et ne pas contenir de caractères spécial)',
+				"username non valid ! (Il doit contenir entre 3 et 36 caractères et ne pas contenir d'espaces ni de caractères spéciaux)",
 		});
 	}
 

@@ -63,13 +63,14 @@
 			span {
 				font-style: italic;
 				font-family: $font-1;
-				color:$white;
+				color: $white;
 			}
 		}
 
 		p {
 			margin: 3px 0 9px;
 			font-size: 1.1rem;
+			width: 100%;
 		}
 		.update-post {
 			textarea {
@@ -86,8 +87,6 @@
 
 					&:hover {
 						background: $color-dark-3;
-						width: 250px;
-						letter-spacing: 1px;
 					}
 				}
 			}
@@ -160,6 +159,9 @@
 			background: $color-dark-3;
 			border: none;
 			border-radius: 20px 20px 6px 20px;
+				.right-part{
+					overflow: hidden;
+				}
 		}
 		.comment-container {
 			display: grid;
@@ -184,7 +186,7 @@
 
 					h3 {
 						font-family: $font-1;
-						color:$white;
+						color: $white;
 					}
 					span {
 						transform: translateX(6px);
@@ -195,7 +197,7 @@
 					font-size: 0.9rem;
 					font-style: italic;
 					font-family: $font-1;
-					color:$white;
+					color: $white;
 				}
 			}
 			p {
@@ -220,8 +222,7 @@
 				.edit-comment-form {
 					margin-top: 14px;
 					label {
-						//background: $white;
-						color: $grey;
+						color: $white;
 						padding: 6px 12px 5px;
 						border-radius: 20px 20px 20px 6px;
 						cursor: pointer;
@@ -253,7 +254,9 @@
 							cursor: pointer;
 
 							&:hover {
-								background: $color-dark-3;
+								img {
+									transform: scale(1);
+								}
 							}
 
 							img {
@@ -265,8 +268,7 @@
 							transition: 0.2s;
 
 							&:hover {
-								width: inherit;
-								background: $color-dark-3;
+								background: $color-3;
 							}
 						}
 					}
@@ -298,9 +300,7 @@
 				float: right;
 
 				&:hover {
-					background: $color-dark-2;
-					letter-spacing: 2px;
-					width: 130px;
+					background: $color-3;
 				}
 			}
 		}
