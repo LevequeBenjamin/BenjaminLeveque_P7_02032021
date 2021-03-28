@@ -155,10 +155,27 @@ exports.updatePost = async (req, res) => {
 /* ******************** deletePost ******************** */
 // permet de supprimer un post
 exports.deletePost = async (req, res) => {
+	const post = await models.Post.findOne({
+		where: { id: req.params.id },
+	});
+	let filename = post.dataValues.imageUrl.split('/uploads/')[1];
+	if (filename !== undefined) {
+		fs.unlink(
+			`${__dirname}/../client/public/uploads/${filename}`,
+			function (err) {
+				if (err) {
+					console.log('error');
+				} else {
+					console.log('fichier supprimé');
+				}
+			},
+		);
+	}
 	try {
 		await models.Post.destroy({
 			where: { id: req.params.id },
 		})
+
 			.then(
 				res
 					.status(200)

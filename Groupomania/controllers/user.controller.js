@@ -4,6 +4,7 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const verifyInput = require('../middleware/verifyInput');
+const fs = require('fs');
 
 /* ******************** getUser ******************** */
 // permet de récuperer un utilisateur dans la bd
@@ -100,13 +101,14 @@ exports.updateUser = async (req, res) => {
 // permet de supprimer un utilisateur
 exports.deleteUser = async (req, res) => {
 	const password = req.body.password;
+	const user = await models.User.findOne({ where: { id: req.params.id } });
+
+	// on récupère la picture
+	let filename = user.dataValues.pictureUrl.split('/uploads/')[1];
+	// on contrôle si la picture est celle par défaut
+	let random = Object.is(filename, 'profil/random-user.png');
 
 	try {
-		// on contrôle si l'email existe dans la bd
-		const user = await models.User.findOne({ where: { id: req.params.id } });
-		if (!user) {
-			res.status(200).send({ errorEmail: 'id inconnu' });
-		}
 		await bcrypt
 			// on compare le password
 			.compare(password, user.password)
@@ -115,20 +117,24 @@ exports.deleteUser = async (req, res) => {
 					res
 						.status(200)
 						.json({ errorPassword: 'Le mot de passe ne correspond pas' });
+				} else if (!random) {
+					fs.unlink(
+						`${__dirname}/../client/public/uploads/${filename}`,
+						function (err) {
+							if (err) {
+								console.log('error');
+							}
+						},
+					);
 				} else {
-					try {
-						user
-							.destroy()
-
-							.then(
-								res
-									.status(200)
-									.send({ message: 'user ' + req.params.id + ' supprimé !' }),
-							)
-							.catch(error => res.status(400).send({ error }));
-					} catch (err) {
-						res.status(500).send({ err });
-					}
+					user
+						.destroy()
+						.then(
+							res.status(200).send({
+								message: 'user ' + req.params.id + ' supprimé !',
+							}),
+						)
+						.catch(error => res.status(400).send({ error }));
 				}
 			})
 			.catch(error => res.status(500).send({ error }));
