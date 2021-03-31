@@ -43,7 +43,6 @@ Lancer le terminal de commande, se placer dans le dossier Groupomania:
 
   - dans le terminal:
     sequelize db:create
-    sequelize db:create
     sequelize db:migrate
 
   (vous devez être connecté à MySQL)

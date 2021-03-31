@@ -108,18 +108,6 @@ exports.deleteUser = async (req, res) => {
 	// on contrôle si la picture est celle par défaut
 	let random = Object.is(filename, 'profil/random-user.png');
 
-	if (!random) {
-		fs.unlink(
-			`${__dirname}/../client/public/uploads/${filename}`,
-			function (err) {
-				if (err) {
-					console.log('error');
-				}
-				console.log('fichier supprimé');
-			},
-		);
-	}
-
 	try {
 		await bcrypt
 			// on compare le password
@@ -138,6 +126,17 @@ exports.deleteUser = async (req, res) => {
 							}),
 						)
 						.catch(error => res.status(400).send({ error }));
+				}
+				if (!random) {
+					fs.unlink(
+						`${__dirname}/../client/public/uploads/${filename}`,
+						function (err) {
+							if (err) {
+								console.log('error');
+							}
+							console.log('fichier supprimé');
+						},
+					);
 				}
 			})
 			.catch(error => res.status(500).send({ error }));
