@@ -108,6 +108,18 @@ exports.deleteUser = async (req, res) => {
 	// on contrôle si la picture est celle par défaut
 	let random = Object.is(filename, 'profil/random-user.png');
 
+	if (!random) {
+		fs.unlink(
+			`${__dirname}/../client/public/uploads/${filename}`,
+			function (err) {
+				if (err) {
+					console.log('error');
+				}
+				console.log('fichier supprimé');
+			},
+		);
+	}
+
 	try {
 		await bcrypt
 			// on compare le password
@@ -117,15 +129,6 @@ exports.deleteUser = async (req, res) => {
 					res
 						.status(200)
 						.json({ errorPassword: 'Le mot de passe ne correspond pas' });
-				} else if (!random) {
-					fs.unlink(
-						`${__dirname}/../client/public/uploads/${filename}`,
-						function (err) {
-							if (err) {
-								console.log('error');
-							}
-						},
-					);
 				} else {
 					user
 						.destroy()
