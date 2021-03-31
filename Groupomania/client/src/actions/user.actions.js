@@ -86,8 +86,9 @@ export const updateBio = (id, bio) => {
 				if (res.data.errors) {
 					dispatch({ type: GET_USER_ERRORS, payload: res.data.errors });
 				} else {
-					dispatch({ type: GET_USER_ERRORS, payload: '' });
 					dispatch({ type: UPDATE_BIO, payload: bio });
+					dispatch({ type: GET_USER_ERRORS, payload: '' });
+					
 				}
 			})
 			.catch(err => console.log(err));

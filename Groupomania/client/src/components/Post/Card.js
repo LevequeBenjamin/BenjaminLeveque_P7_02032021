@@ -18,15 +18,15 @@ const Card = ({ post }) => {
 	// store
 	const usersData = useSelector(state => state.usersReducer);
 	const userData = useSelector(state => state.userReducer);
-	const error = useSelector(state => state.errorReducer.postErrors);
 	// dispatch
 	const dispatch = useDispatch();
 
 	// fonction qui permet d'actualiser un post
-	const updateItem = () => {
+	const updateItem = async () => {
 		if (textUpdate) {
-			dispatch(updatePost(post.id, textUpdate));
+			await dispatch(updatePost(post.id, textUpdate));
 		}
+
 		setIsUpdated(false);
 	};
 
@@ -74,7 +74,6 @@ const Card = ({ post }) => {
 								</h3>
 							</div>
 							<span>{dateParser(post.createdAt)}</span>
-						
 						</div>
 						{isUpdated === false && <p>{post.content}</p>}
 						{isUpdated && (
@@ -84,14 +83,12 @@ const Card = ({ post }) => {
 									onChange={e => setTextUpdate(e.target.value)}
 								/>
 								<div className="button-container">
-								
 									<button className="btn" onClick={updateItem}>
 										Valider modification
 									</button>
 								</div>
 							</div>
 						)}
-							{!isEmpty(error.errorContent) && <p className="error">{error.errorContent}</p>}
 						{post.imageUrl && (
 							<img src={post.imageUrl} alt="card-pic" className="card-pic" />
 						)}

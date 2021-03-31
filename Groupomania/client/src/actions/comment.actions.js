@@ -40,6 +40,7 @@ export const addComment = (post, userData, content) => {
 			.then(res => {
 				if (res.data.errors) {
 					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+					window.alert(res.data.errors.errorContentComment);
 				} else {
 					dispatch({ type: GET_POST_ERRORS, payload: '' });
 					dispatch({ type: ADD_COMMENT, payload: postId });
@@ -78,6 +79,7 @@ export const updateComment = (commentId, content) => {
 			.then(res => {
 				if (res.data.errors) {
 					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+					window.alert(res.data.errors.errorContentComment);
 				} else {
 					dispatch({ type: GET_POST_ERRORS, payload: '' });
 					dispatch({ type: UPDATE_COMMENT, payload: { commentId, content } });

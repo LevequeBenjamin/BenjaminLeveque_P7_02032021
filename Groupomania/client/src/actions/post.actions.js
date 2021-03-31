@@ -81,6 +81,7 @@ export const updatePost = (postId, content) => {
 			.then(res => {
 				if (res.data.errors) {
 					dispatch({ type: GET_POST_ERRORS, payload: res.data.errors });
+					window.alert(res.data.errors.errorUpdateContent)
 				} else {
 					dispatch({ type: GET_POST_ERRORS, payload: '' });
 					dispatch({ type: UPDATE_POST, payload: { content, postId } });

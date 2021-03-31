@@ -128,7 +128,7 @@ exports.updatePost = async (req, res) => {
 	if (content && contentTrue == false) {
 		res.status(200).send({
 			errors: {
-				errorContent:
+				errorUpdateContent:
 					'Vous devez utiliser entre 3 et 250 caractères et ne pas utiliser de caractères spéciaux !',
 			},
 		});
