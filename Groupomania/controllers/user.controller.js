@@ -126,17 +126,18 @@ exports.deleteUser = async (req, res) => {
 							}),
 						)
 						.catch(error => res.status(400).send({ error }));
-				}
-				if (!random) {
-					fs.unlink(
-						`${__dirname}/../client/public/uploads/${filename}`,
-						function (err) {
-							if (err) {
-								console.log('error');
-							}
-							console.log('fichier supprimé');
-						},
-					);
+
+					if (!random) {
+						fs.unlink(
+							`${__dirname}/../client/public/uploads/${filename}`,
+							function (err) {
+								if (err) {
+									console.log('error');
+								}
+								console.log('fichier supprimé');
+							},
+						);
+					}
 				}
 			})
 			.catch(error => res.status(500).send({ error }));
