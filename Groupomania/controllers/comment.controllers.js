@@ -40,7 +40,7 @@ exports.commentPost = async (req, res) => {
 			res.status(401).send({ error: 'désolé, quelque chose à mal tourné' });
 		}
 	} catch (error) {
-		res.status(400).send({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** commentPost end ******************** */
@@ -86,7 +86,7 @@ exports.updatePost = async (req, res) => {
 			.then(comment => res.status(200).send({ comment }))
 			.catch(error => res.status(500).send({ error }));
 	} catch (error) {
-		res.status(400).send({ error });
+		res.status(500).send({ error });
 	}
 };
 /* ******************** updateCommentPost end ******************** */

@@ -1,4 +1,4 @@
-// ******************** src/index ******************** //
+// ******************** src/index.js ******************** //
 
 // imports
 import React from 'react';
@@ -15,18 +15,18 @@ import { getLikes } from './actions/like.actions';
 import { getPosts } from './actions/post.actions';
 
 // dev tools
-import { composeWithDevTools } from 'redux-devtools-extension';
-import logger from 'redux-logger';
+//import { composeWithDevTools } from 'redux-devtools-extension';
+//import logger from 'redux-logger';
+//const store = createStore(
+	//rootReducer,
+	//composeWithDevTools(applyMiddleware(thunk, logger)),
+//);
+
+// const
 const store = createStore(
 	rootReducer,
-	composeWithDevTools(applyMiddleware(thunk, logger)),
+	applyMiddleware(thunk),
 );
-
-// // const
-// const store = createStore(
-// 	rootReducer,
-// 	applyMiddleware(thunk),
-// );
 
 // store
 store.dispatch(getUsers());
